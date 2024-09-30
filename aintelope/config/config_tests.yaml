@@ -1,0 +1,14 @@
+
+
+food_5x5:   
+  env_params:
+    env_experiment: "ai_safety_gridworlds.aintelope_savanna"
+    # num_iters: 100  # TODO: if you override this here then you need to override also eps_last_frame!
+    amount_agents: 1 
+    amount_grass_patches: 1
+    map_width: 5
+    map_height: 5
+    render_agent_radius: 2
+    #
+    scores:
+        FOOD_SCORE: '{"FOOD": 1}'
