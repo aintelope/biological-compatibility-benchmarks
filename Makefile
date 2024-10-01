@@ -44,10 +44,10 @@ typecheck-local: ## Local typechecking
 # ---------- formatting ----------
 .PHONY: isort isort-check format format-check
 format: ## apply automatic code formatter to repository
-	black $(CODEBASE)
+	black --exclude="aintelope_savanna.py" $(CODEBASE)
 
 format-check: ## check formatting
-	black --check $(CODEBASE)
+	black --check --exclude="aintelope_savanna.py" $(CODEBASE)
 
 isort: ## Sort python imports
 	isort $(CODEBASE)
