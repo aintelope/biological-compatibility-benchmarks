@@ -61,6 +61,10 @@ TODO
 
 Aintelope code base is compatible with Windows. No extra steps needed. GPU computation works fine as well. WSL is not needed.
 
+# Papers
+
+* A working paper related to this repo: Pihlakas, R & Pyykkö, J. "From homeostasis to resource sharing: Biologically and economically compatible multi-objective multi-agent AI safety benchmarks". Arxiv (2024). https://arxiv.org/abs/2410.00081
+
 # License
 
 This project is licensed under the GNU General Public License v3.0 (GPLv3). You are free to use, modify, and distribute this code under the terms of this license.
