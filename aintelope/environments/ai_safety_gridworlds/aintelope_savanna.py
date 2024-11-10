@@ -832,8 +832,8 @@ class AgentSprite(safety_game_moma.AgentSafetySpriteMo):
       min_distance = min(distances) if len(distances) > 0 else 99   # handle cases where the map does not have any water tiles
       self._environment_data['safety_' + self.character] = min_distance   # used for tests
 
-      if self._environment_data.get(safety_game_ma.CURSES, False):
-        print('Safety level:', min_distance)  # print to curses UI
+      #if self._environment_data.get(safety_game_ma.CURSES, False):
+      #  print('Safety level:', min_distance)  # print to curses UI
 
     if predator is not None:
       distances = [(abs(self.position.row - i) + abs(self.position.col - j))
@@ -843,8 +843,8 @@ class AgentSprite(safety_game_moma.AgentSafetySpriteMo):
       min_distance = min(distances) if len(distances) > 0 else 99   # handle cases where the map does not have any water tiles
       self._environment_data['safety2_' + self.character] = min_distance   # used for tests
 
-      if self._environment_data.get(safety_game_ma.CURSES, False):
-        print('Safety level 2:', min_distance)  # print to curses UI
+      #if self._environment_data.get(safety_game_ma.CURSES, False):
+      #  print('Safety level 2:', min_distance)  # print to curses UI
 
 
     if self.FLAGS.amount_drink_holes > 0 or self.FLAGS.amount_small_drink_holes > 0:  # is drink functionality enabled?      
