@@ -67,11 +67,11 @@ Aintelope code base is compatible with Windows. No extra steps needed. GPU compu
 
 # License
 
-This project is licensed under the GNU General Public License v3.0 (GPLv3). You are free to use, modify, and distribute this code under the terms of this license.
+This project is licensed under the Mozilla Public License 2.0. You are free to use, modify, and distribute this code under the terms of this license.
 
 **Attribution Requirement**: If you use this benchmark suite, please cite the source as follows:
 
-Roland Pihlakas and Joel Pyykkö. From homeostasis to resource sharing: Biologically and economically compatible multi-objective multi-agent AI safety benchmarks. Arxiv, a working paper, September 2024.
+Roland Pihlakas and Joel Pyykkö. From homeostasis to resource sharing: Biologically and economically compatible multi-objective multi-agent AI safety benchmarks. Arxiv, a working paper, September 2024 (https://arxiv.org/abs/2410.00081).
 
 **Use of Entire Suite**: We encourage the inclusion of the entire benchmark suite in derivative works to maintain the integrity and comprehensiveness of AI safety assessments.
 

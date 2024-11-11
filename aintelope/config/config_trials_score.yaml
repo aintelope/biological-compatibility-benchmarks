@@ -1,3 +1,9 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#
+# Repository: https://github.com/aintelope/biological-compatibility-benchmarks
+
 hparams:
   gridsearch_trial_no: ${range:10,100}        # used just to repeat same experiment multiple times
   params_set_title: "score"
@@ -27,7 +33,7 @@ hparams:
   test_episodes: 10     # 2 # will be added to train episodes
   env_params:
     num_iters: null # [300, 400] # duration of a single episode. NB! warm_start_steps will be subtracted from this value
-    map_max: 7  # [7, 9]     # used for old AIntelope environment
+    map_max: 7  # [7, 9]     
     map_width: ${hparams.env_params.map_max}   # NB! here it is exclusive max, used for Gridworld environments. Also, this width includes the walls at the border of the game, so 2 units of walls. Therefore, interior is map_width - 2.
     map_height: ${hparams.env_params.map_max}   # NB! here it is exclusive max, used for Gridworld environments. Also, this width includes the walls at the border of the game, so 2 units of walls. Therefore, interior is map_height - 2.
     #
