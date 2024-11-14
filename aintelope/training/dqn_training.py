@@ -33,6 +33,7 @@ def load_checkpoint(
     hidden_sizes,
     num_conv_layers,
     conv_size,
+    combine_interoception_and_vision,
 ):
     """
     https://pytorch.org/tutorials/recipes/recipes/saving_and_loading_a_general_checkpoint.html
@@ -70,6 +71,9 @@ class Trainer:
         self.action_spaces = {}
 
         self.hparams = params.hparams
+        self.combine_interoception_and_vision = (
+            params.hparams.env_params.combine_interoception_and_vision
+        )
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         print("Using GPU: " + str(self.device not in ["cpu"]))
@@ -134,25 +138,40 @@ class Trainer:
 
         logger.debug("debug observation", type(observation))
 
-        observation = (
-            torch.tensor(
-                np.expand_dims(
-                    observation[0], 0
-                ),  # vision     # call .flatten() in case you want to force 1D network even on 3D vision
-            ),
-            torch.tensor(np.expand_dims(observation[1], 0)),  # interoception
-        )
-        logger.debug(
-            "debug observation tensor",
-            (type(observation[0]), type(observation[1])),
-            (observation[0].shape, observation[1].shape),
-        )
-
-        if str(self.device) not in ["cpu"]:
+        if not self.combine_interoception_and_vision:
             observation = (
-                observation[0].cuda(self.device),
-                observation[1].cuda(self.device),
+                torch.tensor(
+                    np.expand_dims(
+                        observation[0], 0
+                    )  # vision     # call .flatten() in case you want to force 1D network even on 3D vision
+                ),
+                torch.tensor(np.expand_dims(observation[1], 0)),  # interoception
             )
+            logger.debug(
+                "debug observation tensor",
+                (type(observation[0]), type(observation[1])),
+                (observation[0].shape, observation[1].shape),
+            )
+
+            if str(self.device) not in ["cpu"]:
+                observation = (
+                    observation[0].cuda(self.device),
+                    observation[1].cuda(self.device),
+                )
+        else:
+            observation = torch.tensor(
+                np.expand_dims(
+                    observation, 0
+                )  # vision     # call .flatten() in case you want to force 1D network even on 3D vision
+            )
+            logger.debug(
+                "debug observation tensor",
+                type(observation),
+                observation.shape,
+            )
+
+            if str(self.device) not in ["cpu"]:
+                observation = observation.cuda(self.device)
 
         q_values = [1]  # TODO
 

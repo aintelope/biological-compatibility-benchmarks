@@ -126,6 +126,7 @@ class GridworldZooBaseEnv:
         "test_death_probability": 0.33,
         "scalarize_rewards": False,  # needed for Zoo sequential API unit tests
         "flatten_observations": False,  # this will not work with current code
+        "combine_interoception_and_vision": False,
     }
 
     def __init__(self, env_params: Optional[Dict] = None):
@@ -242,28 +243,48 @@ class GridworldZooBaseEnv:
 
         self._override_infos = self.metadata["override_infos"]
         self._scalarize_rewards = self.metadata["scalarize_rewards"]
+        self._combine_interoception_and_vision = self.metadata[
+            "combine_interoception_and_vision"
+        ]
 
     def init_observation_spaces(self, parent_observation_spaces, infos):
         # for @zoo-api
-        self.transformed_observation_spaces = {
-            agent: gymnasium.spaces.Tuple(
-                [
-                    Box(
-                        low=0,  # this is a boolean bitmap
-                        high=1,  # this is a boolean bitmap
-                        shape=(
-                            len(
-                                infos[agent][INFO_AGENT_OBSERVATION_LAYERS_ORDER]
-                            ),  # this already includes all_agents layer,
-                            parent_observation_spaces[agent].shape[1],
-                            parent_observation_spaces[agent].shape[2],
-                        ),
+        if self._combine_interoception_and_vision:
+            self.transformed_observation_spaces = {
+                agent: Box(
+                    low=0,  # this is a boolean bitmap
+                    high=1,  # this is a boolean bitmap
+                    shape=(
+                        len(infos[agent][INFO_AGENT_OBSERVATION_LAYERS_ORDER])
+                        + 2,  # this already includes all_agents layer + 2 for interoception
+                        parent_observation_spaces[agent].shape[1],
+                        parent_observation_spaces[agent].shape[2],
                     ),
-                    Box(low=-np.inf, high=np.inf, shape=(2,)),  # interoception vector
-                ]
-            )
-            for agent in self.possible_agents
-        }
+                )
+                for agent in self.possible_agents
+            }
+        else:
+            self.transformed_observation_spaces = {
+                agent: gymnasium.spaces.Tuple(
+                    [
+                        Box(
+                            low=0,  # this is a boolean bitmap
+                            high=1,  # this is a boolean bitmap
+                            shape=(
+                                len(
+                                    infos[agent][INFO_AGENT_OBSERVATION_LAYERS_ORDER]
+                                ),  # this already includes all_agents layer,
+                                parent_observation_spaces[agent].shape[1],
+                                parent_observation_spaces[agent].shape[2],
+                            ),
+                        ),
+                        Box(
+                            low=-np.inf, high=np.inf, shape=(2,)
+                        ),  # interoception vector
+                    ]
+                )
+                for agent in self.possible_agents
+            }
 
         qqq = True  # for debugging
 
@@ -286,15 +307,39 @@ class GridworldZooBaseEnv:
             for agent_name, agent_chr in self.agent_name_mapping.items():
                 all_agents_layer |= info[INFO_AGENT_OBSERVATION_LAYERS_DICT][agent_chr]
 
-            observation = np.vstack(
-                [observation, np.expand_dims(all_agents_layer, axis=0)]
-            )  # feature vector is the first dimension
+            if self._combine_interoception_and_vision:
+                # TODO: Config for interoception scaling? Or use sigmoid transformation?
+                # NB! use +0.5 so that interoception value of 0 is centered between min and max of 0 and 1.
+                interoception_values = (
+                    info[INFO_AGENT_INTEROCEPTION_VECTOR].astype(np.float32) / 1000
+                    + 0.5
+                )
 
-            return (
-                observation.astype(np.float32),
-                # np.array(agent_interoception_vector).astype(np.float32)
-                info[INFO_AGENT_INTEROCEPTION_VECTOR].astype(np.float32),
-            )
+                # Add two more layers to the vision observation, representing interoception measures. For both interoception measures, entire layer will have same value.
+                interoception_layers = np.expand_dims(
+                    np.ones([observation.shape[1], observation.shape[2]], np.float32),
+                    axis=0,
+                ) * np.expand_dims(interoception_values, axis=[1, 2])
+
+                observation = np.vstack(
+                    [
+                        observation,
+                        np.expand_dims(all_agents_layer, axis=0),
+                        interoception_layers,
+                    ]
+                )  # feature vector is the first dimension
+
+                return observation
+            else:
+                observation = np.vstack(
+                    [observation, np.expand_dims(all_agents_layer, axis=0)]
+                )  # feature vector is the first dimension
+
+                return (
+                    observation.astype(np.float32),
+                    # np.array(agent_interoception_vector).astype(np.float32)
+                    info[INFO_AGENT_INTEROCEPTION_VECTOR].astype(np.float32),
+                )
 
     def format_info(self, agent: str, info: dict):
         # keep only necessary fields of infos
@@ -358,10 +403,17 @@ class GridworldZooBaseEnv:
         allowed_keys = [
             INFO_AGENT_OBSERVATION_COORDINATES,
             INFO_AGENT_OBSERVATION_LAYERS_ORDER,
+            INFO_AGENT_INTEROCEPTION_VECTOR,  # keeping interoception available in info since in observation it may be either located in its own vector or be part of the vision. That make access to this data cumbersome when writing hardcoded rules. Accessing via info argument is more convenient in such cases.
             INFO_AGENT_INTEROCEPTION_ORDER,
             ACTION_RELATIVE_COORDINATE_MAP,
         ]
         result = {key: value for key, value in info.items() if key in allowed_keys}
+
+        if INFO_AGENT_INTEROCEPTION_VECTOR in result:
+            result[INFO_AGENT_INTEROCEPTION_VECTOR] = result[
+                INFO_AGENT_INTEROCEPTION_VECTOR
+            ].tolist()  # NB! need to convert it to list since Zoo unit tests are not able to compare numpy arrays inside info dict
+
         return result
 
     def filter_infos(self, infos: dict):
