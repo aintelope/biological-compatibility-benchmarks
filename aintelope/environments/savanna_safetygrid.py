@@ -119,7 +119,6 @@ class GridworldZooBaseEnv:
         # Alternate observation format to current vector of absolute coordinates.
         # Bitmap representation enables representing objects which might be outside of
         # agent's observation zone for time being.
-        "observe_bitmap_layers": True,
         # Needed for tests. Zoo is unable to compare infos
         # unless they have simple structure.
         "override_infos": False,
@@ -241,59 +240,30 @@ class GridworldZooBaseEnv:
             if self.metadata.get(metadata_key, None) is not None:
                 self.super_initargs[super_initargs_key] = self.metadata[metadata_key]
 
-        self._observe_bitmap_layers = self.metadata["observe_bitmap_layers"]
         self._override_infos = self.metadata["override_infos"]
         self._scalarize_rewards = self.metadata["scalarize_rewards"]
 
     def init_observation_spaces(self, parent_observation_spaces, infos):
         # for @zoo-api
-        if self._observe_bitmap_layers:
-            self.transformed_observation_spaces = {
-                agent: gymnasium.spaces.Tuple(
-                    [
-                        Box(
-                            low=0,  # this is a boolean bitmap
-                            high=1,  # this is a boolean bitmap
-                            shape=(
-                                len(
-                                    infos[agent][INFO_AGENT_OBSERVATION_LAYERS_ORDER]
-                                ),  # this already includes all_agents layer,
-                                parent_observation_spaces[agent].shape[1],
-                                parent_observation_spaces[agent].shape[2],
-                            ),
+        self.transformed_observation_spaces = {
+            agent: gymnasium.spaces.Tuple(
+                [
+                    Box(
+                        low=0,  # this is a boolean bitmap
+                        high=1,  # this is a boolean bitmap
+                        shape=(
+                            len(
+                                infos[agent][INFO_AGENT_OBSERVATION_LAYERS_ORDER]
+                            ),  # this already includes all_agents layer,
+                            parent_observation_spaces[agent].shape[1],
+                            parent_observation_spaces[agent].shape[2],
                         ),
-                        Box(
-                            low=-np.inf, high=np.inf, shape=(2,)
-                        ),  # interoception vector
-                    ]
-                )
-                for agent in self.possible_agents
-            }
-        else:
-            self.transformed_observation_spaces = {
-                agent: gymnasium.spaces.Tuple(
-                    [
-                        Box(
-                            low=0,
-                            high=len(
-                                GAME_ART[0][0]
-                            ),  # TODO: consider height as well and read it from env object
-                            shape=(
-                                2
-                                * (
-                                    self.metadata["amount_agents"]
-                                    + self.metadata["amount_grass_patches"]
-                                    + self.metadata["amount_water_holes"]
-                                ),
-                            ),
-                        ),
-                        Box(
-                            low=-np.inf, high=np.inf, shape=(2,)
-                        ),  # dummy interoception vector
-                    ]
-                )
-                for agent in self.possible_agents
-            }
+                    ),
+                    Box(low=-np.inf, high=np.inf, shape=(2,)),  # interoception vector
+                ]
+            )
+            for agent in self.possible_agents
+        }
 
         qqq = True  # for debugging
 
@@ -301,66 +271,30 @@ class GridworldZooBaseEnv:
     def transform_observation(
         self, agent: str, info: dict
     ) -> npt.NDArray[ObservationFloat]:
-        if self._observe_bitmap_layers:
-            if agent is None:
-                return info[INFO_OBSERVATION_LAYERS_CUBE].astype(np.float32)
-            else:  # the info is already agent-specific, so no need to find agent subkey here
-                # agent_interoception_vector = [
-                #    info["metrics_dict"]["FoodSatiation_" + self.agent_name_mapping[agent]],
-                #    info["metrics_dict"]["DrinkSatiation_" + self.agent_name_mapping[agent]],
-                # ]
-                observation = info[INFO_AGENT_OBSERVATION_LAYERS_CUBE]
+        if agent is None:
+            return info[INFO_OBSERVATION_LAYERS_CUBE].astype(np.float32)
+        else:  # the info is already agent-specific, so no need to find agent subkey here
+            # agent_interoception_vector = [
+            #    info["metrics_dict"]["FoodSatiation_" + self.agent_name_mapping[agent]],
+            #    info["metrics_dict"]["DrinkSatiation_" + self.agent_name_mapping[agent]],
+            # ]
+            observation = info[INFO_AGENT_OBSERVATION_LAYERS_CUBE]
 
-                all_agents_layer = np.zeros(
-                    [observation.shape[1], observation.shape[2]], bool
-                )
-                for agent_name, agent_chr in self.agent_name_mapping.items():
-                    all_agents_layer |= info[INFO_AGENT_OBSERVATION_LAYERS_DICT][
-                        agent_chr
-                    ]
-
-                observation = np.vstack(
-                    [observation, np.expand_dims(all_agents_layer, axis=0)]
-                )  # feature vector is the first dimension
-
-                return (
-                    observation.astype(np.float32),
-                    # np.array(agent_interoception_vector).astype(np.float32)
-                    info[INFO_AGENT_INTEROCEPTION_VECTOR].astype(np.float32),
-                )
-
-        else:
-            """
-            NB! So far the savanna code has been using absolute coordinates, not
-            relative coordinates. In case of relative coordinates, sometimes an object
-            might be outside of agent's observation distance. If you want to return
-            object location as agent-centric boolean bitmap, then it is easy to set
-            all cells to False. But with coordinates you need either special values or
-            an additional boolean dimension which indicates whether the coordinate is
-            available or not.
-            """
-
-            # TODO: import agent char map from env instead
-            agent_observations = []
+            all_agents_layer = np.zeros(
+                [observation.shape[1], observation.shape[2]], bool
+            )
             for agent_name, agent_chr in self.agent_name_mapping.items():
-                agent_observations += list(
-                    info[INFO_OBSERVATION_COORDINATES][agent_chr][0]
-                )  # convert tuple to list
-            for x in info[INFO_OBSERVATION_COORDINATES].get(FOOD_CHR, []):
-                agent_observations += list(x)  # convert tuple to list
-            for x in info[INFO_OBSERVATION_COORDINATES].get(DRINK_CHR, []):
-                agent_observations += list(x)  # convert tuple to list
+                all_agents_layer |= info[INFO_AGENT_OBSERVATION_LAYERS_DICT][agent_chr]
 
-            agent_observations = np.array(
-                agent_observations, np.float32
-            )  # NB! Q-agent expects float32 observation type
+            observation = np.vstack(
+                [observation, np.expand_dims(all_agents_layer, axis=0)]
+            )  # feature vector is the first dimension
 
-            assert (
-                agent_observations.shape == self.observation_space(agent).shape
-            ), "observation / observation space shape mismatch"
-
-            dummy_interoception_vector = np.zeros([2], np.float32)
-            return (agent_observations, dummy_interoception_vector)
+            return (
+                observation.astype(np.float32),
+                # np.array(agent_interoception_vector).astype(np.float32)
+                info[INFO_AGENT_INTEROCEPTION_VECTOR].astype(np.float32),
+            )
 
     def format_info(self, agent: str, info: dict):
         # keep only necessary fields of infos
@@ -507,13 +441,12 @@ class GridworldZooBaseEnv:
 
     """
     This API is intended primarily as input for the neural network.
-    if observe_bitmap_layers == True then observe() method returns same value as
-    observe_relative_bitmaps()
+    Currently observe() method returns same value as observe_relative_bitmaps() though it 
+    might depend on configuration in future implementations (this has been the case in the
+    past with some currently removed implementations).
     Relative observation bitmap is agent centric and considers the agent's observation
     radius. Environments with different sizes will have same-shaped relative
     observation bitmaps as long as the agent's observation radius is same.
-    if observe_bitmap_layers == False then the agent currently returns vector of
-    coordinates compatible with the old Savanna agent implementation.
     """
 
     def observe(self, agent=None) -> Union[Dict[AgentId, Observation], Observation]:
@@ -549,8 +482,9 @@ class GridworldZooBaseEnv:
     observation bitmap is agent centric and considers the agent's observation
     radius. Environments with different sizes will have same-shaped relative
     observation bitmaps as long as the agent's observation radius is same.
-    if observe_bitmap_layers == True then observe() method returns same value
-    as observe_relative_bitmaps()
+    Currently, observe() method returns same value as observe_relative_bitmaps() though it 
+    might depend on configuration in future implementations (this has been the case in the
+    past with some currently removed implementations).
     """
 
     def observe_relative_bitmaps(
