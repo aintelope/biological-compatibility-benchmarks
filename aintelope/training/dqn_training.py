@@ -108,7 +108,7 @@ class Trainer:
     def tiebreaking_argmax(self, arr):
         max_values_bitmap = np.isclose(arr, arr.max())
         max_values_indexes = np.flatnonzero(max_values_bitmap)
-        result = np.random.choice(max_values_indexes)
+        result = np.random.choice(max_values_indexes)   # TODO: seed for this random generator
         return result
 
     @torch.no_grad()
