@@ -1,3 +1,9 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#
+# Repository: https://github.com/aintelope/biological-compatibility-benchmarks
+
 import os
 
 import numpy as np
@@ -120,12 +126,19 @@ def test_gridworlds_step_result(execution_number):
     done = terminated or truncated
 
     assert not done
-    assert isinstance(
-        observation[0], np.ndarray
-    ), "observation[0] of agent is not an array"
-    assert isinstance(
-        observation[1], np.ndarray
-    ), "observation[1] of agent is not an array"
+
+    if not env._combine_interoception_and_vision:
+        assert isinstance(
+            observation[0], np.ndarray
+        ), "observation[0] of agent is not an array"
+        assert isinstance(
+            observation[1], np.ndarray
+        ), "observation[1] of agent is not an array"
+    else:
+        assert isinstance(
+            observation, np.ndarray
+        ), "observation of agent is not an array"
+
     assert isinstance(reward, dict), "reward of agent is not a dict"
 
 
@@ -172,7 +185,7 @@ def test_gridworlds_action_spaces():
     env = safetygrid.SavannaGridworldSequentialEnv()
 
     for agent in env.possible_agents:
-        assert isinstance(env.action_space(agent), MultiDiscrete)
+        assert isinstance(env.action_space(agent), Discrete)
         assert env.action_space(agent).n == 5  # includes no-op
 
 
