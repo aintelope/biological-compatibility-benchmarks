@@ -69,6 +69,8 @@ def run_experiment(
             get_agent_class(cfg.hparams.agent_class)(
                 agent_id,
                 trainer,
+                env,
+                cfg,
                 **cfg.hparams.agent_params,
             )
         )

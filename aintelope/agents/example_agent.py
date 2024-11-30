@@ -10,8 +10,17 @@ from typing import List, Optional, Tuple
 from collections import defaultdict
 from gymnasium.spaces import Discrete
 
+from omegaconf import DictConfig
+
 import numpy as np
 import numpy.typing as npt
+
+from typing import Union
+import gymnasium as gym
+from pettingzoo import AECEnv, ParallelEnv
+
+PettingZooEnv = Union[AECEnv, ParallelEnv]
+Environment = Union[gym.Env, PettingZooEnv]
 
 from aintelope.environments.savanna_safetygrid import ACTION_RELATIVE_COORDINATE_MAP
 
@@ -29,6 +38,8 @@ class ExampleAgent(QAgent):
         self,
         agent_id: str,
         trainer: Trainer,
+        env: Environment,
+        cfg: DictConfig = None,
     ) -> None:
         super().__init__(
             agent_id=agent_id,
@@ -118,10 +129,10 @@ class ExampleAgent(QAgent):
         reward = 0  # TODO
         # print(f"reward: {reward}")
 
-        if next_state is not None:
-            next_s_hist = next_state
-        else:
-            next_s_hist = None
+        # if next_state is not None:
+        #    next_s_hist = next_state
+        # else:
+        #    next_s_hist = None
 
         event = [self.id, self.state, self.last_action, reward, done, next_state]
         self.state = next_state
