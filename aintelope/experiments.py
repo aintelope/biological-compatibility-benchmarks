@@ -33,7 +33,11 @@ def run_experiment(
     logger = logging.getLogger("aintelope.experiment")
 
     # Environment
-    env = get_env_class(cfg.hparams.env)(env_params=cfg.hparams.env_params)
+    env = get_env_class(cfg.hparams.env)(
+        env_params=cfg.hparams.env_params,
+        ignore_num_iters=True,  # NB! this file implements its own iterations bookkeeping in order to allow the agent to learn from the last step
+    )
+
     if isinstance(env, ParallelEnv):
         (
             observations,
