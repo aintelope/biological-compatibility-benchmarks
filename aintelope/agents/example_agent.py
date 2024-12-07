@@ -17,7 +17,7 @@ import numpy.typing as npt
 
 from aintelope.environments.savanna_safetygrid import ACTION_RELATIVE_COORDINATE_MAP
 
-from aintelope.agents.q_agent import QAgent
+from aintelope.agents.abstract_agent import Agent
 from aintelope.aintelope_typing import ObservationFloat, PettingZooEnv
 from aintelope.training.dqn_training import Trainer
 
@@ -31,7 +31,7 @@ Environment = Union[gym.Env, PettingZooEnv]
 logger = logging.getLogger("aintelope.agents.example_agent")
 
 
-class ExampleAgent(QAgent):
+class ExampleAgent(Agent):
     """Example agent class"""
 
     def __init__(
@@ -40,15 +40,22 @@ class ExampleAgent(QAgent):
         trainer: Trainer,
         env: Environment = None,
         cfg: DictConfig = None,
+        **kwargs,
     ) -> None:
-        super().__init__(
-            agent_id=agent_id,
-            trainer=trainer,
-        )
+        self.id = agent_id
+        self.trainer = trainer
+        self.env = env
+        self.cfg = cfg
+        self.done = False
+        self.last_action = None
 
     def reset(self, state, info, env_class) -> None:
         """Resets self and updates the state."""
-        super().reset(state, info, env_class)
+        self.done = False
+        self.last_action = None
+        self.state = state
+        self.info = info
+        self.env_class = env_class
 
     def get_action(
         self,
@@ -63,11 +70,6 @@ class ExampleAgent(QAgent):
     ) -> Optional[int]:
         """Given an observation, ask your net what to do. State is needed to be
         given here as other agents have changed the state!
-
-        Args:
-            net: pytorch Module instance, the model
-            epsilon: value to determine likelihood of taking a random action
-            device: current device
 
         Returns:
             action (Optional[int]): index of action
@@ -100,7 +102,6 @@ class ExampleAgent(QAgent):
         score: float = 0.0,
         done: bool = False,
         test_mode: bool = False,
-        save_path: Optional[str] = None,  # TODO: this is unused right now
     ) -> list:
         """
         Takes observations and updates trainer on perceived experiences.
@@ -110,7 +111,6 @@ class ExampleAgent(QAgent):
             observation: Tuple[ObservationArray, ObservationArray]
             score: Only baseline uses score as a reward
             done: boolean whether run is done
-            save_path: str
         Returns:
             agent_id (str): same as elsewhere ("agent_0" among them)
             state (Tuple[npt.NDArray[ObservationFloat], npt.NDArray[ObservationFloat]]): input for the net

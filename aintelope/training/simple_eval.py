@@ -185,7 +185,12 @@ def run_episode(full_params: Dict) -> None:
                     observation = observations[agent.id]
                     info = infos[agent.id]
                     actions[agent.id] = agent.get_action(
-                        observation, info, step, trial=0, episode=0, pipeline_cycle=0
+                        observation=observation,
+                        info=info,
+                        step=step,
+                        trial=0,
+                        episode=0,
+                        pipeline_cycle=0,
                     )
 
                 logger.debug("debug actions", actions)
@@ -225,9 +230,9 @@ def run_episode(full_params: Dict) -> None:
                     else:
                         # action = action_space(agent.id).sample()
                         action = agent.get_action(
-                            observation,
-                            info,
-                            step,
+                            observation=observation,
+                            info=info,
+                            step=step,
                             trial=0,
                             episode=0,
                             pipeline_cycle=0,
@@ -295,7 +300,12 @@ def run_episode(full_params: Dict) -> None:
                     observation = observations[agent.id]
                     info = infos[agent.id]
                     actions[agent.id] = agent.get_action(
-                        observation, info, step, trial=0, episode=0, pipeline_cycle=0
+                        observation=observation,
+                        info=info,
+                        step=step,
+                        trial=0,
+                        episode=0,
+                        pipeline_cycle=0,
                     )
 
                 logger.debug("debug actions", actions)
@@ -337,9 +347,9 @@ def run_episode(full_params: Dict) -> None:
                     else:
                         # action = action_space(agent.id).sample()
                         action = agent.get_action(
-                            observation,
-                            info,
-                            step,
+                            observation=observation,
+                            info=info,
+                            step=step,
                             trial=0,
                             episode=0,
                             pipeline_cycle=0,

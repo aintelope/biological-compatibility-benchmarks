@@ -14,8 +14,9 @@ import matplotlib.path as mpath
 import math
 import numpy as np
 import pandas as pd
-from matplotlib import cm
+
 from matplotlib import pyplot as plt
+
 import yaml
 
 """
@@ -54,7 +55,9 @@ def filter_train_and_test_events(
     score_dimensions = ["Reward"] + score_dimensions
     events[score_dimensions] = events[score_dimensions].astype(float)
 
-    if group_by_pipeline_cycle:
+    if (
+        group_by_pipeline_cycle
+    ):  # TODO: perhaps this branch is not needed and the "IsTest" column is sufficient in all cases?
         train_events = events[events["Pipeline cycle"] < num_train_pipeline_cycles]
         test_events = events[events["Pipeline cycle"] >= num_train_pipeline_cycles]
     else:
@@ -238,7 +241,7 @@ def plot_performance(
     ] = True  # ensure that plot labels fit to the image and do not overlap
 
     # fig = plt.figure()
-    fig, subplots = plt.subplots(3)
+    fig, subplots = plt.subplots(len(plot_datas))
 
     linewidth = 0.75  # TODO: config
 

@@ -48,6 +48,24 @@ def run_experiment(
     else:
         raise NotImplementedError(f"Unknown environment type {type(env)}")
 
+    events = pd.DataFrame(
+        columns=[
+            "Run_id",
+            "Pipeline cycle",
+            "Episode",
+            "Trial",
+            "Step",
+            "IsTest",
+            "Agent_id",
+            "State",
+            "Action",
+            "Reward",
+            "Done",
+            "Next_state",
+        ]
+        + (score_dimensions if isinstance(env, GridworldZooBaseEnv) else ["Score"])
+    )
+
     # Common trainer for each agent's models
     trainer = Trainer(cfg)
 
@@ -148,23 +166,6 @@ def run_experiment(
     #    agents.play_step(self.net, epsilon=1.0)
 
     # Main loop
-    events = pd.DataFrame(
-        columns=[
-            "Run_id",
-            "Pipeline cycle",
-            "Episode",
-            "Trial",
-            "Step",
-            "IsTest",
-            "Agent_id",
-            "State",
-            "Action",
-            "Reward",
-            "Done",
-            "Next_state",
-        ]
-        + (score_dimensions if isinstance(env, GridworldZooBaseEnv) else ["Score"])
-    )
 
     model_needs_saving = (
         False  # if no training episodes are specified then do not save models
