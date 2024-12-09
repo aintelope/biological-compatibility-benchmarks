@@ -16,16 +16,49 @@ The project installation is managed via `make` and `pip`. Please see the
 respective commanads in the `Makefile`. To setup the environment follow these
 steps:
 
-0. Install CPython from python.org. The code is tested with Python version 3.10.10
-1. Create a virtual python environment: `make venv`
-2. Activate the environment: `source venv_aintelope/bin/activate`
-3. Install dependencies: `make install`
+1. Install CPython from python.org. The code is tested with Python version 3.10.10
 
-For development and testing follow (active environment):
+Under Linux, run the following commands:
 
-1. Install development dependencies: `make install-dev`
-2. Install project locally: `make build-local`
-3. Run tests: `make tests-local`
+`sudo add-apt-repository ppa:deadsnakes/ppa`
+<br>`sudo apt update`
+<br>`sudo apt install python3.10 python3.10-dev python3.10-venv`
+<br>`sudo curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10`
+
+2. Get the code from repo:
+
+`sudo apt install git-all`
+<br>`git clone git@github.com:aintelope/biological-compatibility-benchmarks.git`
+
+3. Create a virtual python environment:
+
+`make venv-310`
+<br>`source venv_aintelope/bin/activate`
+
+4. Install dependencies:
+
+`sudo apt update`
+<br>`sudo apt install build-essential`
+<br>`sudo apt install curl`
+<br>`make install`
+<br>*ignore warning about ai_safety_gridworlds*
+
+5. If you use VSCode, then set up your launch configurations file:
+
+`cp .vscode/launch.json.template .vscode/launch.json`
+
+Edit the launch.json so that the PYTHONPATH variable points to the folder where you downloaded the repo and installed virtual environment:
+
+replace all
+<br>//"PYTHONPATH": "your_path_here"
+<br>with
+<br>"PYTHONPATH": "your_local_repo_path"
+
+6. For development and testing:
+
+* Install development dependencies: `make install-dev`
+* Run tests: `make tests-local`
+
 
 ### Code formatting and style
 

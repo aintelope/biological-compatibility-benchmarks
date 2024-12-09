@@ -16,6 +16,9 @@ run-pipeline: ## run pipeline
 venv: ## create virtual environment
 	@if [ ! -f "$(VENV)/bin/activate" ]; then python3 -m venv $(VENV) ; fi;
 
+venv-310: ## create virtual environment
+	@if [ ! -f "$(VENV)/bin/activate" ]; then python3.10 -m venv $(VENV) ; fi;
+
 clean-venv: ## remove virtual environment
 	if [ -d $(VENV) ]; then rm -r $(VENV) ; fi;
 
