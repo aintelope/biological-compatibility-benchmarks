@@ -112,7 +112,12 @@ def run_pipeline(cfg: DictConfig) -> None:
     if gridsearch_params_in is None:
         print("Waiting for semaphore...")
     with Semaphore(
-        semaphore_name, max_count=num_workers, disable=gridsearch_params_in is not None
+        semaphore_name,
+        max_count=num_workers,
+        disable=(gridsearch_params_in is not None)
+        or (
+            os.name != "nt"
+        ),  # Linux does not unlock semaphore after a process gets killed, therefore disabling Semaphore under Linux until this gets resolved.
     ) as semaphore:
         if gridsearch_params_in is None:
             print("Semaphore acquired...")

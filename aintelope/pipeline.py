@@ -89,7 +89,9 @@ def run_pipeline(cfg: DictConfig) -> None:
     with Semaphore(
         semaphore_name,
         max_count=num_workers,
-        disable=False,  # set disable=True if you have trouble with the Semaphore hanging there
+        disable=(
+            os.name != "nt"
+        ),  # Linux does not unlock semaphore after a process gets killed, therefore disabling Semaphore under Linux until this gets resolved.
     ) as semaphore:
         print("Semaphore acquired...")
         max_pipeline_cycle = (
