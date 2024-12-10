@@ -433,30 +433,6 @@ class GridworldZooBaseEnv:
             for agent, agent_info in infos.items()
         }
 
-    # @property
-    # def grass_patches(self):
-    #    any_agent = self._last_infos[
-    #        "agent_0"
-    #    ]  # any agent is good here since we are using global coordinates here
-    #    coordinates = any_agent[INFO_OBSERVATION_COORDINATES].get(FOOD_CHR, [])
-    #    if len(coordinates) > 0:
-    #        grass_patches = np.array(coordinates)
-    #    else:
-    #        grass_patches = np.zeros([0, 2])
-    #    return grass_patches
-
-    # @property
-    # def water_holes(self):
-    #    any_agent = self._last_infos[
-    #        "agent_0"
-    #    ]  # any agent is good here since we are using global coordinates here
-    #    coordinates = any_agent[INFO_OBSERVATION_COORDINATES].get(DRINK_CHR, [])
-    #    if len(coordinates) > 0:
-    #        water_holes = np.array(coordinates)
-    #    else:
-    #        water_holes = np.zeros([0, 2])
-    #    return water_holes
-
     def observe_from_location(
         self, agents_coordinates: Dict, agents_directions: Dict = None
     ):
@@ -475,31 +451,6 @@ class GridworldZooBaseEnv:
 
     def observation_space(self, agent):
         return self.transformed_observation_spaces[agent]
-
-    ## called by DQNLightning
-    # def state_to_namedtuple(self, state: npt.NDArray[ObservationFloat]) -> NamedTuple:
-    #    """Method to convert a state array into a named tuple."""
-    #    agent_coords = {
-    #        "agent_coords": state[:2]
-    #    }  # TODO: make it dependant on number of agents
-    #    grass_patches_coords = {}
-    #    gp_offset = 2
-    #    water_holes_coords = {}
-    #    wh_offset = 2 + self.metadata["amount_grass_patches"] * 2
-    #    for i in range(self.metadata["amount_grass_patches"]):
-    #        grass_patches_coords[f"grass_patch_{i}"] = state[
-    #            gp_offset + i : gp_offset + i + 2
-    #        ]
-    #    for i in range(self.metadata["amount_water_holes"]):
-    #        water_holes_coords[f"water_hole_{i}"] = state[
-    #            wh_offset + i : wh_offset + i + 2
-    #        ]
-
-    #    keys = (
-    #        list(agent_coords) + list(grass_patches_coords) + list(water_holes_coords)
-    #    )
-    #    StateTuple = namedtuple("StateTuple", {k: np.ndarray for k in keys})
-    #    return StateTuple(**agent_coords, **grass_patches_coords, **water_holes_coords)
 
     """
     This API is intended primarily as input for the neural network.

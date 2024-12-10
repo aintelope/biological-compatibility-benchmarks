@@ -124,15 +124,11 @@ class ExampleAgent(Agent):
 
         next_state = observation
         next_info = info
-        # For future: add state (interoception) handling here when needed
 
-        reward = 0  # TODO
+        # TODO: implement any learning mechanisms here
+
+        reward = 0  # TODO: This will be sent to the log file
         # print(f"reward: {reward}")
-
-        # if next_state is not None:
-        #    next_s_hist = next_state
-        # else:
-        #    next_s_hist = None
 
         event = [self.id, self.state, self.last_action, reward, done, next_state]
         self.state = next_state

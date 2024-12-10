@@ -462,16 +462,6 @@ def run_experiment(
             i_episode, dir_cp, experiment_name, use_separate_models_for_each_experiment
         )
 
-    # normalise slashes in paths. This is not mandatory, but will be cleaner to debug
-    # experiment_dir = os.path.normpath(cfg.experiment_dir)
-    # events_fname = cfg.events_fname
-    #
-    # record_path = Path(os.path.join(experiment_dir, events_fname))
-    # os.makedirs(experiment_dir, exist_ok=True)
-    # rec.record_events(
-    #    record_path, events
-    # )  # TODO: flush the events log every once a while and later append new rows
-
     events.close()
 
 

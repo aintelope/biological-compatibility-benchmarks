@@ -23,6 +23,7 @@ Under Linux, run the following commands:
 `sudo add-apt-repository ppa:deadsnakes/ppa`
 <br>`sudo apt update`
 <br>`sudo apt install python3.10 python3.10-dev python3.10-venv`
+<br>`sudo apt install curl`
 <br>`sudo curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10`
 
 2. Get the code from repo:
@@ -39,7 +40,6 @@ Under Linux, run the following commands:
 
 `sudo apt update`
 <br>`sudo apt install build-essential`
-<br>`sudo apt install curl`
 <br>`make install`
 <br>*ignore warning about ai_safety_gridworlds*
 
@@ -58,6 +58,9 @@ replace all
 
 * Install development dependencies: `make install-dev`
 * Run tests: `make tests-local`
+
+7. Location of an example agent you can use as a template for building your custom agent: 
+[`aintelope\agents\example_agent.py`](aintelope/agents/example_agent.py)
 
 
 ### Code formatting and style
