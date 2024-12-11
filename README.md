@@ -28,7 +28,8 @@ Under Linux, run the following commands:
 2. Get the code from repo:
 
 `sudo apt install git-all`
-<br>`git clone https://github.com/aintelope/biological-compatibility-benchmarks.git`
+<br>Run `git clone https://github.com/aintelope/biological-compatibility-benchmarks.git`
+<br>Run `cd biological-compatibility-benchmarks`
 
 3. Create a virtual python environment:
 
