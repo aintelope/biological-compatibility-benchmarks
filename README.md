@@ -10,13 +10,12 @@ The source code for the extended gridworlds framework can be found at [https://g
 
 ## Project setup
 
-### Installation
 
-The project installation is managed via `make` and `pip`. Please see the
-respective commanads in the `Makefile`. To setup the environment follow these
-steps:
+### Installation under Linux
 
-1. Install CPython from python.org. The code is tested with Python version 3.10.10
+The project installation is managed via `make` and `pip`. Please see the respective commands in the `Makefile`. To setup the environment follow these steps:
+
+1. Install CPython. The code is tested with Python version 3.10.10. We do not recommend using Conda package manager. 
 
 Under Linux, run the following commands:
 
@@ -29,7 +28,7 @@ Under Linux, run the following commands:
 2. Get the code from repo:
 
 `sudo apt install git-all`
-<br>`git clone git@github.com:aintelope/biological-compatibility-benchmarks.git`
+<br>`git clone https://github.com/aintelope/biological-compatibility-benchmarks.git`
 
 3. Create a virtual python environment:
 
@@ -41,7 +40,6 @@ Under Linux, run the following commands:
 `sudo apt update`
 <br>`sudo apt install build-essential`
 <br>`make install`
-<br>*ignore warning about ai_safety_gridworlds*
 
 5. If you use VSCode, then set up your launch configurations file:
 
@@ -58,6 +56,46 @@ replace all
 
 * Install development dependencies: `make install-dev`
 * Run tests: `make tests-local`
+
+7. Location of an example agent you can use as a template for building your custom agent: 
+[`aintelope/agents/example_agent.py`](aintelope/agents/example_agent.py)
+
+
+### Installation under Windows
+
+1. Install CPython from python.org. The code is tested with Python version 3.10.10. We do not recommend using Conda package manager.
+
+You can download the latest installer from https://www.python.org/downloads/release/python-31010/ or if you want to download a newer 3.10.x version then from https://github.com/adang1345/PythonWindows
+
+2. Get the code from repo:
+* Install Git from https://gitforwindows.org/
+* Open command prompt and navigate top the folder you want to use for repo
+* Run `git clone https://github.com/aintelope/biological-compatibility-benchmarks.git`
+* Run `cd biological-compatibility-benchmarks`
+
+3. Create a virtual python environment by running: 
+<br>`python -m venv venv_aintelope`
+<br>`venv_aintelope\scripts\activate`
+
+4. Install dependencies by running:
+<br>`pip uninstall -y ai_safety_gridworlds >nul 2>&1`
+<br>`pip install -r requirements/api.txt`
+
+5. If you use VSCode, then set up your launch configurations file:
+
+`copy .vscode\launch.json.template .vscode\launch.json`
+
+Edit the launch.json so that the PYTHONPATH variable points to the folder where you downloaded the repo and installed virtual environment:
+
+replace all
+<br>//"PYTHONPATH": "your_path_here"
+<br>with
+<br>"PYTHONPATH": "your_local_repo_path"
+
+6. For development and testing:
+
+* Install development dependencies: `pip install -r requirements/dev.txt`
+* Run tests: `python -m pytest --tb=native --cov="aintelope tests"`
 
 7. Location of an example agent you can use as a template for building your custom agent: 
 [`aintelope\agents\example_agent.py`](aintelope/agents/example_agent.py)

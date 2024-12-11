@@ -23,7 +23,7 @@ clean-venv: ## remove virtual environment
 	if [ -d $(VENV) ]; then rm -r $(VENV) ; fi;
 
 install: ## Install packages
-	pip uninstall -y ai_safety_gridworlds
+	pip uninstall -y ai_safety_gridworlds 2>&1 | grep -v "not installed"
 	pip install -r requirements/api.txt
 
 install-dev: ## Install development packages
