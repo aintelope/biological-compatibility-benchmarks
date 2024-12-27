@@ -317,12 +317,11 @@ class GridworldZooBaseEnv:
                 all_agents_layer |= info[INFO_AGENT_OBSERVATION_LAYERS_DICT][agent_chr]
 
             if self._combine_interoception_and_vision:
-                # TODO: Config for interoception scaling? Or use sigmoid transformation?
+                # TODO!: Config for interoception scaling? Or use sigmoid transformation?
                 # NB! use +0.5 so that interoception value of 0 is centered between min and max of 0 and 1.
                 interoception_values = (
-                    info[INFO_AGENT_INTEROCEPTION_VECTOR].astype(np.float32) / 1000
-                    + 0.5
-                )
+                    info[INFO_AGENT_INTEROCEPTION_VECTOR].astype(np.float32) / 100 + 0.5
+                ).clip(0, 1)
 
                 # Add two more layers to the vision observation, representing interoception measures. For both interoception measures, entire layer will have same value.
                 interoception_layers = np.expand_dims(
