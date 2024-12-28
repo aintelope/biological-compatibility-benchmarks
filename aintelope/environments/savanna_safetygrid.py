@@ -451,6 +451,10 @@ class GridworldZooBaseEnv:
     def observation_space(self, agent):
         return self.transformed_observation_spaces[agent]
 
+    @property
+    def observation_spaces(self):
+        return self.transformed_observation_spaces
+
     """
     This API is intended primarily as input for the neural network.
     Currently observe() method returns same value as observe_relative_bitmaps() though it 
