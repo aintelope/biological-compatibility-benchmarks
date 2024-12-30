@@ -90,6 +90,6 @@ def analytics(cfg, score_dimensions, title, experiment_name, do_not_show_plot=Fa
     )
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # for multiprocessing support
     register_resolvers()
     aintelope_main()

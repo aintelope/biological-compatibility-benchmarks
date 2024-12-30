@@ -42,9 +42,9 @@ from aintelope.pipeline import analytics
 
 logger = logging.getLogger("aintelope.__main__")
 
-gpu_count = max(1, torch.cuda.device_count())
+gpu_count = torch.cuda.device_count()
 worker_count_multiplier = 1  # when running pipeline search, then having more workers than GPU-s will cause all sorts of Python and CUDA errors under Windows for some reason, even though there is plenty of free RAM and GPU memory. Yet, when the pipeline processes are run manually, there is no concurrency limit except the real hardware capacity limits. # TODO: why?
-num_workers = gpu_count * worker_count_multiplier
+num_workers = max(1, gpu_count) * worker_count_multiplier
 
 # needs to be initialised here in order to avoid circular imports in gridsearch
 cache_folder = "gridsearch_cache"
@@ -116,7 +116,7 @@ def run_pipeline(cfg: DictConfig) -> None:
         max_count=num_workers,
         disable=(gridsearch_params_in is not None)
         or (
-            os.name != "nt"
+            os.name != "nt" or gpu_count == 0
         ),  # Linux does not unlock semaphore after a process gets killed, therefore disabling Semaphore under Linux until this gets resolved.
     ) as semaphore:
         if gridsearch_params_in is None:

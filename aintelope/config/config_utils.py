@@ -155,13 +155,24 @@ def set_memory_limits():
         set_mem_limits(data_size_limit, address_space_size_limit)
 
 
-def select_gpu():
-    gridsearch_gpu = os.environ.get("AINTELOPE_GPU")
-    if gridsearch_gpu is not None:
-        gridsearch_gpu = int(gridsearch_gpu)
-        torch.cuda.set_device(gridsearch_gpu)
-        device_name = torch.cuda.get_device_name(gridsearch_gpu)
-        print(f"Using CUDA GPU {gridsearch_gpu} : {device_name}")
+def select_gpu(gpu_index=None):
+    if gpu_index is None:
+        gpu_index = os.environ.get("AINTELOPE_GPU")
+
+    # TODO: run some threads on CPU if the available GPU-s do not support the required amount of threads
+
+    if gpu_index is not None:
+        gpu_count = torch.cuda.device_count()
+        if gpu_count == 0:
+            print(
+                "No CUDA GPU available, ignoring assigned GPU index, will be using CPU as a CUDA device"
+            )
+            return
+
+        gpu_index = int(gpu_index)
+        torch.cuda.set_device(gpu_index)
+        device_name = torch.cuda.get_device_name(gpu_index)
+        print(f"Using CUDA GPU {gpu_index} : {device_name}")
     else:
         # for each next experiment select next available GPU to maximally balance the load considering multiple running processes
         rotate_active_gpu_selection()
@@ -193,7 +204,7 @@ def rotate_active_gpu_selection():
 
     gpu_count = torch.cuda.device_count()
     if gpu_count == 0:
-        print("No CUDA GPU available")
+        print("No CUDA GPU available, will be using CPU as a CUDA device")
         return
 
     elif gpu_count == 1:

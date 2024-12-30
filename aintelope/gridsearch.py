@@ -121,7 +121,7 @@ async def run_gridsearch_experiments() -> None:
 
             if use_multiprocessing:
                 # for each next experiment select next available GPU to maximally balance the load considering multiple running processes
-                use_gpu = available_gpus.pop(0)
+                use_gpu_index = available_gpus.pop(0) if any(available_gpus) else None
 
                 arguments = {
                     "gridsearch_params": gridsearch_params,
@@ -129,12 +129,12 @@ async def run_gridsearch_experiments() -> None:
                     "args": sys.argv,
                     "do_not_create_subprocess": False,
                     "environ": dict(os.environ),
-                    "use_gpu_index": use_gpu,
+                    "use_gpu_index": use_gpu_index,
                 }
                 coroutine = asyncio.create_task(
                     run_gridsearch_experiment_multiprocess(**arguments)
                 )  # NB! do not await here yet, awaiting will be done below by waiting for a group of coroutines at once.
-                coroutine_gpus[coroutine] = use_gpu
+                coroutine_gpus[coroutine] = use_gpu_index
 
                 active_coroutines.add(coroutine)
                 if len(active_coroutines) == num_workers:
@@ -142,7 +142,9 @@ async def run_gridsearch_experiments() -> None:
                         active_coroutines, return_when=asyncio.FIRST_COMPLETED
                     )
                     for task in dones:
-                        available_gpus.append(coroutine_gpus[task])
+                        gpu_index = coroutine_gpus[task]
+                        if gpu_index is not None:
+                            available_gpus.append(gpu_index)
                         del coroutine_gpus[task]
 
                         ex = (
@@ -329,7 +331,7 @@ def get_run_gridsearch_experiment_cache_helper_cache_key(gridsearch_params):
     )
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # for multiprocessing support
     register_resolvers()
 
     if (
