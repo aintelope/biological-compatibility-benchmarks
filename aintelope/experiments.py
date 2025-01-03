@@ -206,7 +206,9 @@ def run_experiment(
             # https://pytorch.org/tutorials/recipes/recipes/
             # saving_and_loading_a_general_checkpoint.html
             if not test_mode:
-                if i_episode > 0:
+                if (
+                    i_episode > 0 and cfg.hparams.save_frequency != 0
+                ):  # cfg.hparams.save_frequency == 0 means that the model is saved only at the end, improving training performance
                     model_needs_saving = True
                     if i_episode % cfg.hparams.save_frequency == 0:
                         os.makedirs(dir_cp, exist_ok=True)
