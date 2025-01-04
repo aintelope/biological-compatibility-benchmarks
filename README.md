@@ -1,4 +1,4 @@
-# Biologically and economically compatible multi-objective multi-agent AI safety benchmarks
+# Biologically and economically aligned multi-objective multi-agent AI safety benchmarks
 
 Developing safe agentic AI systems benefits from automated empirical testing that conforms with human values, a subfield that is largely underdeveloped at the moment. To contribute towards this topic, present work focuses on introducing biologically and economically motivated themes that have been neglected in the safety aspects of modern reinforcement learning literature, namely homeostasis, balancing multiple objectives, bounded objectives, diminishing returns, sustainability, and multi-agent resource sharing. We implemented eight main benchmark environments on the above themes, for illustrating the potential shortcomings of current mainstream discussions on AI safety.
 
@@ -139,6 +139,17 @@ Aintelope code base is compatible with Windows. No extra steps needed. GPU compu
 # Papers
 
 * A working paper related to this repo: Pihlakas, R & Pyykkö, J. "From homeostasis to resource sharing: Biologically and economically compatible multi-objective multi-agent AI safety benchmarks". Arxiv (2024). https://arxiv.org/abs/2410.00081
+
+# Presentations
+
+* At VAISU unconference, May 2024:
+    - Demo and feedback session - AI safety benchmarking in multi-objective multi-agent gridworlds - Biologically essential yet neglected themes illustrating the weaknesses and dangers of current industry standard approaches to reinforcement learning. 
+    - Video: https://www.youtube.com/watch?v=ydxMlGlQeco
+    - Slides: https://bit.ly/bmmbs
+* At Foresight Institute's Intelligent Cooperation Group, Nov 2024: 
+    - The subject of the presentation was describing why we should consider fundamental yet neglected principles from biology and economics when thinking about AI alignment, and how these considerations will help with AI safety as well (alignment and safety were treated in this research explicitly as separate aspects, which both benefit from consideration of aforementioned principles). These principles include homeostasis and diminishing returns in utility functions, and sustainability. Next I will introduce multi-objective and multi-agent gridworlds-based benchmark environments we have created for measuring the performance of machine learning algorithms and AI agents in relation to their capacity for biological and economical alignment. The benchmarks are now available as a public repo. At the end I will mention some of the related themes and dilemmas not yet covered by these benchmarks, and describe new benchmark environments we have planned for future implementation.
+    - Recording: https://www.youtube.com/watch?v=DCUqqyyhcko
+    - Slides: https://bit.ly/beamm 
 
 # License
 
