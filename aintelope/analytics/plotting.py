@@ -186,6 +186,31 @@ def aggregate_scores(
     )
 
 
+def maximise_plot():
+    try:
+        figManager = plt.get_current_fig_manager()
+    except Exception:
+        return
+
+    # https://stackoverflow.com/questions/12439588/how-to-maximize-a-plt-show-window
+    try:
+        figManager.window.state("zoomed")
+    except Exception:
+        pass
+
+    try:
+        figManager.frame.Maximize(True)
+    except Exception:
+        pass
+
+    try:
+        figManager.window.showMaximized()
+    except Exception:
+        pass
+
+    return
+
+
 def plot_performance(
     all_events,
     num_train_episodes,
@@ -269,6 +294,7 @@ def plot_performance(
     if not do_not_show_plot:
         # enable this code if you want the plot to open automatically
         plt.ion()
+        maximise_plot()
         fig.show()
         plt.draw()
         # TODO: use multithreading for rendering the plot

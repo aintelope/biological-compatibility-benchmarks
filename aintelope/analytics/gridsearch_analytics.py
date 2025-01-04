@@ -27,7 +27,7 @@ from filelock import FileLock
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-from aintelope.analytics.plotting import save_plot
+from aintelope.analytics.plotting import save_plot, maximise_plot
 from aintelope.config.config_utils import register_resolvers
 from aintelope.utils import wait_for_enter, try_df_to_csv_write, RobustProgressBar
 
@@ -974,6 +974,7 @@ def gridsearch_analytics(cfg: DictConfig) -> None:
         save_plot(axes.figure, save_path)
 
         plt.ion()
+        maximise_plot()
         axes.figure.show()
         plt.draw()
         plt.pause(

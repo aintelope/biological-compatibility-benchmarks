@@ -17,7 +17,7 @@ from filelock import FileLock
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-from aintelope.analytics.plotting import save_plot
+from aintelope.analytics.plotting import save_plot, maximise_plot
 
 
 def boxplot() -> None:
@@ -92,6 +92,7 @@ def boxplot() -> None:
     save_plot(axes.figure, save_path)
 
     plt.ion()
+    maximise_plot()
     axes.figure.show()
     plt.draw()
     plt.pause(
