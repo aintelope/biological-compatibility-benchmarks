@@ -219,8 +219,13 @@ class Trainer:
         # TODO
         pass
 
-    def save_models(
-        self, episode, path, experiment_name, use_separate_models_for_each_experiment
+    def save_model(
+        self,
+        agent_id,
+        episode,
+        path,
+        experiment_name,
+        use_separate_models_for_each_experiment,
     ):
         """
         Save model artifacts to 'path'.
@@ -233,27 +238,24 @@ class Trainer:
             None
         """
 
-        agent_ids = []  # TODO
+        # TODO
 
-        for agent_id in agent_ids:
-            # TODO
+        checkpoint_filename = agent_id
+        if use_separate_models_for_each_experiment:
+            checkpoint_filename += "-" + experiment_name
 
-            checkpoint_filename = agent_id
-            if use_separate_models_for_each_experiment:
-                checkpoint_filename += "-" + experiment_name
+        filename = os.path.join(
+            path,
+            checkpoint_filename
+            + "-"
+            + datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f"),
+        )
 
-            filename = os.path.join(
-                path,
-                checkpoint_filename
-                + "-"
-                + datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f"),
-            )
-
-            logger.info(f"Saving agent {agent_id} models to disk at {filename}")
-            torch.save(
-                {
-                    "epoch": episode,
-                    # TODO
-                },
-                filename,
-            )
+        logger.info(f"Saving agent {agent_id} models to disk at {filename}")
+        torch.save(
+            {
+                "epoch": episode,
+                # TODO
+            },
+            filename,
+        )

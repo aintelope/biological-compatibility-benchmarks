@@ -89,15 +89,15 @@ def run_experiment(
     prev_agent_checkpoint = None
     for i in range(env.max_num_agents):
         agent_id = f"agent_{i}"
-        agents.append(
-            get_agent_class(cfg.hparams.agent_class)(
-                agent_id=agent_id,
-                trainer=trainer,
-                env=env,
-                cfg=cfg,
-                **cfg.hparams.agent_params,
-            )
+        agent = get_agent_class(cfg.hparams.agent_class)(
+            agent_id=agent_id,
+            trainer=trainer,
+            env=env,
+            cfg=cfg,
+            test_mode=test_mode,
+            **cfg.hparams.agent_params,
         )
+        agents.append(agent)
 
         # TODO: IF agent.reset() below is not needed then it is possible to call
         # env.observation_space(agent_id) directly to get the observation shape.
@@ -118,7 +118,7 @@ def run_experiment(
 
         # TODO: is this reset necessary here? In main loop below,
         # there is also a reset call
-        agents[-1].reset(observation, info, type(env))
+        agent.reset(observation, info, type(env))
         # Get latest checkpoint if existing
 
         checkpoint = None
@@ -143,19 +143,19 @@ def run_experiment(
                 prev_agent_checkpoint is not None
             ):  # later experiments may have more agents    # TODO: configuration option for determining whether new agents can copy the checkpoints of earlier agents, and if so then specifically which agent's checkpoint to use
                 checkpoint = prev_agent_checkpoint
+            elif test_mode:
+                raise Exception("No trained model found, cannot run test!")
 
         # Add agent, with potential checkpoint
         if not cfg.hparams.env_params.combine_interoception_and_vision:
-            trainer.add_agent(
-                agent_id,
+            agent.init_model(
                 (observation[0].shape, observation[1].shape),
                 env.action_space,
                 unit_test_mode=unit_test_mode,
                 checkpoint=checkpoint,
             )
         else:
-            trainer.add_agent(
-                agent_id,
+            agent.init_model(
                 observation.shape,
                 env.action_space,
                 unit_test_mode=unit_test_mode,
@@ -212,12 +212,14 @@ def run_experiment(
                     model_needs_saving = True
                     if i_episode % cfg.hparams.save_frequency == 0:
                         os.makedirs(dir_cp, exist_ok=True)
-                        trainer.save_models(
-                            i_episode,
-                            dir_cp,
-                            experiment_name,
-                            use_separate_models_for_each_experiment,
-                        )
+                        for agent in agents:
+                            agent.save_model(
+                                i_episode,
+                                dir_cp,
+                                experiment_name,
+                                use_separate_models_for_each_experiment,
+                            )
+
                         model_needs_saving = False
                 else:
                     model_needs_saving = True
@@ -460,9 +462,13 @@ def run_experiment(
         model_needs_saving
     ):  # happens when num_episodes is not divisible by save frequency
         os.makedirs(dir_cp, exist_ok=True)
-        trainer.save_models(
-            i_episode, dir_cp, experiment_name, use_separate_models_for_each_experiment
-        )
+        for agent in agents:
+            agent.save_model(
+                i_episode,
+                dir_cp,
+                experiment_name,
+                use_separate_models_for_each_experiment,
+            )
 
     events.close()
 

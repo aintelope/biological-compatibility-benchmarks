@@ -46,3 +46,23 @@ class Agent(ABC):
         test_mode: bool = False,
     ) -> list:
         ...
+
+    @abstractmethod
+    def init_model(
+        self,
+        observation_shape,
+        action_space,
+        unit_test_mode: bool,
+        checkpoint: Optional[str] = None,
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def save_model(
+        self,
+        i_episode,
+        dir_cp,
+        experiment_name,
+        use_separate_models_for_each_experiment,
+    ) -> None:
+        ...
