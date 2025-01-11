@@ -9,11 +9,50 @@ from ast import literal_eval
 from pathlib import Path
 import zipfile
 import os
+import sys
 import uuid
 import time
 import torch
 
 from omegaconf import DictConfig, OmegaConf
+
+
+def set_console_title(title):
+    try:
+        if os.name == "nt":
+            import ctypes
+
+            ctypes.windll.kernel32.SetConsoleTitleW(
+                title
+            )  # https://stackoverflow.com/questions/7387276/set-windows-command-line-terminal-title-in-python
+        else:
+            term = os.getenv("TERM")
+            if (
+                term[:5] == "xterm" or term == "vt100"
+            ):  # xterm may have various suffices in after "xterm"
+                cmd = "\x1B]0;{}\x07".format(title)
+                print(
+                    cmd
+                )  # https://www.thecodingforums.com/threads/changing-the-terminal-title-bar-with-python.965355/
+            elif os.name == "posix":  # linux or mac
+                import platform
+
+                system = platform.system()
+                if system == "Linux":
+                    cmd = "\x1B]2;{}\x07".format(
+                        title
+                    )  # https://bbs.archlinux.org/viewtopic.php?id=85567
+                    sys.stdout.write(cmd)
+                elif system == "Darwin":
+                    # \033]0; "\033 is an escape code (ESC)". But \u001b or \x1b represent ESC too. - https://github.com/grimmer0125/terminal-title-change/blob/master/termtitle/termtitle.py
+                    # Since Ubuntu 16.04, escape sequence used is invalid due to $PS1 environment variable. Python interpreter process can not modify it (a kind of system process setting). So the only way is to change $PS1 in ~/.bashrc. - https://github.com/grimmer0125/terminal-title-change/wiki
+                    # Though it works fine in 24.04.1 LTS
+                    cmd = "\033]0;{}\007".format(
+                        title
+                    )  # https://github.com/grimmer0125/terminal-title-change/blob/master/termtitle/termtitle.py
+                    sys.stdout.write(cmd)
+    except Exception:
+        pass
 
 
 def get_project_path(path_from_root: str) -> Path:
