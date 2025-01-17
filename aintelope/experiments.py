@@ -143,7 +143,10 @@ def run_experiment(
                 prev_agent_checkpoint is not None
             ):  # later experiments may have more agents    # TODO: configuration option for determining whether new agents can copy the checkpoints of earlier agents, and if so then specifically which agent's checkpoint to use
                 checkpoint = prev_agent_checkpoint
-            elif test_mode:
+            elif (
+                test_mode
+                and not cfg.hparams.do_not_enforce_checkpoint_file_existence_during_test
+            ):
                 raise Exception("No trained model found, cannot run test!")
 
         # Add agent, with potential checkpoint
