@@ -97,7 +97,9 @@ def run_pipeline(cfg: DictConfig) -> None:
         semaphore_name,
         max_count=num_workers,
         disable=(
-            os.name != "nt" or gpu_count == 0
+            os.name != "nt"
+            or gpu_count == 0
+            or True  # TODO: config flag for disabling the semaphore
         ),  # Linux does not unlock semaphore after a process gets killed, therefore disabling Semaphore under Linux until this gets resolved.
     ) as semaphore:
         print("Semaphore acquired...")
