@@ -195,11 +195,13 @@ def maximise_plot():
     # https://stackoverflow.com/questions/12439588/how-to-maximize-a-plt-show-window
     try:
         figManager.window.state("zoomed")
+        return
     except Exception:
         pass
 
     try:
         figManager.frame.Maximize(True)
+        return
     except Exception:
         pass
 
@@ -207,8 +209,6 @@ def maximise_plot():
         figManager.window.showMaximized()
     except Exception:
         pass
-
-    return
 
 
 def plot_performance(

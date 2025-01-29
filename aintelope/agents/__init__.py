@@ -9,6 +9,9 @@ from aintelope.agents.abstract_agent import Agent
 from aintelope.agents.example_agent import ExampleAgent
 
 from aintelope.agents.q_agent import QAgent
+
+from aintelope.agents.llm_agent import LLMAgent
+
 from aintelope.agents.simple_agents import (
     # IterativeWeightOptimizationAgent,
     # OneStepPerfectPredictionAgent,
@@ -39,3 +42,5 @@ register_agent_class("random_walk_agent", RandomWalkAgent)
 
 register_agent_class("q_agent", QAgent)
 register_agent_class("example_agent", ExampleAgent)
+
+register_agent_class("llm_agent", LLMAgent)

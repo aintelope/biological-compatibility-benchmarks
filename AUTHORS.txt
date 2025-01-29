@@ -1,19 +1,19 @@
-Total commits: 894
-Total ctimes: 3173
-Total files: 151
-Total loc: 12233
+Total commits: 915
+Total ctimes: 3303
+Total files: 158
+Total loc: 13873
 | Author                              |   loc |   coms |   fils |  distribution   |
 |:------------------------------------|------:|-------:|-------:|:----------------|
-| Roland Pihlakas                     | 10899 |    387 |     73 | 89.1/43.3/48.3  |
-| Joel Pyykkö                         |   387 |    128 |     12 | 3.2/14.3/ 7.9   |
-| derdre                              |   385 |     62 |     23 | 3.1/ 6.9/15.2   |
-| a.kochanke                          |   260 |    145 |     20 | 2.1/16.2/13.2   |
-| Gunnar Zarncke                      |   127 |      1 |      1 | 1.0/ 0.1/ 0.7   |
-| Nathan Helm-Burger                  |   101 |     63 |      9 | 0.8/ 7.0/ 6.0   |
-| Hauke Rehfeld                       |    51 |     57 |      3 | 0.4/ 6.4/ 2.0   |
-| Orpheus Lummis                      |     9 |      2 |      3 | 0.1/ 0.2/ 2.0   |
-| U-SKETCHER\Gunnar Zarncke           |     6 |     12 |      3 | 0.0/ 1.3/ 2.0   |
+| Roland Pihlakas                     | 12664 |    408 |     80 | 91.3/44.6/50.6  |
+| Joel Pyykkö                         |   379 |    128 |     12 | 2.7/14.0/ 7.6   |
+| derdre                              |   373 |     62 |     23 | 2.7/ 6.8/14.6   |
+| a.kochanke                          |   242 |    145 |     20 | 1.7/15.8/12.7   |
+| Gunnar Zarncke                      |   127 |      1 |      1 | 0.9/ 0.1/ 0.6   |
+| Nathan Helm-Burger                  |    54 |     63 |      9 | 0.4/ 6.9/ 5.7   |
+| Hauke Rehfeld                       |    11 |     57 |      3 | 0.1/ 6.2/ 1.9   |
+| Orpheus Lummis                      |     9 |      2 |      3 | 0.1/ 0.2/ 1.9   |
+| U-SKETCHER\Gunnar Zarncke           |     6 |     12 |      3 | 0.0/ 1.3/ 1.9   |
 | ak                                  |     6 |      1 |      2 | 0.0/ 0.1/ 1.3   |
-| postuur                             |     1 |     33 |      1 | 0.0/ 3.7/ 0.7   |
-| Biological Compatibility Benchmarks |     1 |      1 |      1 | 0.0/ 0.1/ 0.7   |
+| postuur                             |     1 |     33 |      1 | 0.0/ 3.6/ 0.6   |
+| Biological Compatibility Benchmarks |     1 |      1 |      1 | 0.0/ 0.1/ 0.6   |
 | NathanNeuro                         |     0 |      2 |      0 | 0.0/ 0.2/ 0.0   |

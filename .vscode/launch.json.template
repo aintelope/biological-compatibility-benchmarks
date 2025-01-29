@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Python: Current File",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
@@ -21,7 +21,7 @@
         //-----------------------------------------------------------------------------------
         {
             "name": "Python: Run single environment with random agent and default params",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/nonpipeline.py",
             "console": "integratedTerminal",
@@ -33,8 +33,21 @@
             }
         },
         {
+            "name": "Python: Run single environment with LLM agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/nonpipeline.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_llm_agent" ],
+            "env": {
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        {
             "name": "Python: Run single environment with example agent and default params",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/nonpipeline.py",
             "console": "integratedTerminal",
@@ -50,7 +63,7 @@
         //-----------------------------------------------------------------------------------
         {
             "name": "Python: Run pipeline with random agent and default params",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/pipeline.py",
             "console": "integratedTerminal",
@@ -63,8 +76,22 @@
             }
         },
         {
+            "name": "Python: Run BioBlue pipeline with LLM agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/pipeline.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_llm_agent" ],
+            "env": {
+                "PIPELINE_CONFIG": "config_pipeline_bioblue.yaml"
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        {
             "name": "Python: Run pipeline with example agent and default params",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/pipeline.py",
             "console": "integratedTerminal",
@@ -81,7 +108,7 @@
         //-----------------------------------------------------------------------------------
         {
             "name": "Python: Run pipeline with example agent and per environment optimised params",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/pipeline.py",
             "console": "integratedTerminal",
@@ -94,11 +121,11 @@
             }
         },
         //-----------------------------------------------------------------------------------
-        // Configurations to run multiple trials with X agent and default params
+        // Configurations to run multiple trials pipeline with X agent and default params
         //-----------------------------------------------------------------------------------
         {
             "name": "Python: Run multiple trials with random agent and default params",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/gridsearch.py",
             "console": "integratedTerminal",
@@ -112,8 +139,38 @@
             }
         },
         {
-            "name": "Python: Run multiple trials pipeline with example agent and default param (use only for debugging)",
-            "type": "python",
+            "name": "Python: Run multiple trials pipeline with LLM agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/gridsearch.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_llm_agent" ],
+            "env": {
+                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "GRIDSEARCH_CONFIG": "config_trials_llm_agent.yaml"
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        {
+            "name": "Python: Run multiple trials BioBlue pipeline with LLM agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/gridsearch.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_llm_agent" ],
+            "env": {
+                "PIPELINE_CONFIG": "config_pipeline_bioblue.yaml",
+                "GRIDSEARCH_CONFIG": "config_trials_llm_agent.yaml"
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        {
+            "name": "Python: Run multiple trials pipeline with example agent and default params (use only for debugging)",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/gridsearch.py",
             "console": "integratedTerminal",
@@ -131,7 +188,7 @@
         //-----------------------------------------------------------------------------------
         {
             "name": "Python: Run multiple trials pipeline with example agent and per environment optimised params",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/gridsearch.py",
             "console": "integratedTerminal",
@@ -149,7 +206,7 @@
         //-----------------------------------------------------------------------------------
         {
             "name": "Python: Run gridsearch pipeline with example agent",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/gridsearch.py",
             "console": "integratedTerminal",
@@ -167,7 +224,7 @@
         //-----------------------------------------------------------------------------------
         {
             "name": "Python: Human-playable demo: 1. Food Unbounded",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/environments/demos/gridworlds/food_unbounded.py",
             "console": "integratedTerminal",
@@ -181,7 +238,7 @@
         },
         {
             "name": "Python: Human-playable demo: 2. Danger Tiles",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/environments/demos/gridworlds/danger_tiles.py",
             "console": "integratedTerminal",
@@ -195,7 +252,7 @@
         },
         {
             "name": "Python: Human-playable demo: 3. Predators",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/environments/demos/gridworlds/predators.py",
             "console": "integratedTerminal",
@@ -209,7 +266,7 @@
         },
         {
             "name": "Python: Human-playable demo: 4. Homeostasis",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/environments/demos/gridworlds/homeostasis.py",
             "console": "integratedTerminal",
@@ -223,7 +280,7 @@
         },
         {
             "name": "Python: Human-playable demo: 5. Sustainability",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/environments/demos/gridworlds/sustainability.py",
             "console": "integratedTerminal",
@@ -237,7 +294,7 @@
         },
         {
             "name": "Python: Human-playable demo: 6. Food Unbounded",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/environments/demos/gridworlds/food_unbounded.py",
             "console": "integratedTerminal",
@@ -251,7 +308,7 @@
         },
         {
             "name": "Python: Human-playable demo: 7. Food-Drink Homeostasis",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/environments/demos/gridworlds/food_drink_homeostasis.py",
             "console": "integratedTerminal",
@@ -265,7 +322,7 @@
         },
         {
             "name": "Python: Human-playable demo: 8. Food-Drink Homeostasis Gold",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/environments/demos/gridworlds/food_drink_homeostasis_gold.py",
             "console": "integratedTerminal",
@@ -279,7 +336,7 @@
         },
         {
             "name": "Python: Human-playable demo: 9. Food-Frink Homeostasis Gold-Silver",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "aintelope/environments/demos/gridworlds/food_drink_homeostasis_gold_silver.py",
             "console": "integratedTerminal",

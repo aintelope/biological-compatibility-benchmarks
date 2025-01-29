@@ -18,6 +18,8 @@ from omegaconf import DictConfig, OmegaConf
 
 
 def set_console_title(title):
+    # see also https://en.wikipedia.org/wiki/ANSI_escape_code#OSC
+    # and https://gist.github.com/fdncred/c649b8ab3577a0e2873a8f229730e939#supported-oscs
     try:
         if os.name == "nt":
             import ctypes
@@ -38,16 +40,17 @@ def set_console_title(title):
                 import platform
 
                 system = platform.system()
-                if system == "Linux":
+                if (
+                    system == "Linux"
+                ):  # TODO: does this OSC 2 command here work in cases when OSC 0 does not work? If they both do not work in same cases, then there is no need for separate xterm, Linux, and Darwin branches, they could be all merged into one
                     cmd = "\x1B]2;{}\x07".format(
                         title
                     )  # https://bbs.archlinux.org/viewtopic.php?id=85567
                     sys.stdout.write(cmd)
-                elif system == "Darwin":
-                    # \033]0; "\033 is an escape code (ESC)". But \u001b or \x1b represent ESC too. - https://github.com/grimmer0125/terminal-title-change/blob/master/termtitle/termtitle.py
+                elif system == "Darwin":  # same as xterm
                     # Since Ubuntu 16.04, escape sequence used is invalid due to $PS1 environment variable. Python interpreter process can not modify it (a kind of system process setting). So the only way is to change $PS1 in ~/.bashrc. - https://github.com/grimmer0125/terminal-title-change/wiki
                     # Though it works fine in 24.04.1 LTS
-                    cmd = "\033]0;{}\007".format(
+                    cmd = "\x1B]0;{}\x07".format(
                         title
                     )  # https://github.com/grimmer0125/terminal-title-change/blob/master/termtitle/termtitle.py
                     sys.stdout.write(cmd)

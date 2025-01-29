@@ -18,12 +18,15 @@ from aintelope.environments.ai_safety_gridworlds.aintelope_savanna import (  # T
     AGENT_CHR2,
     DRINK_CHR,
     FOOD_CHR,
+    SMALL_FOOD_CHR,
     DRINK_CHR,
+    SMALL_DRINK_CHR,
     GOLD_CHR,
     SILVER_CHR,
     DANGER_TILE_CHR,
     PREDATOR_NPC_CHR,
     WALL_CHR,
+    GAP_CHR,
     GAME_ART,
 )
 
@@ -258,6 +261,7 @@ class GridworldZooBaseEnv:
 
     def init_observation_spaces(self, parent_observation_spaces, infos):
         # for @zoo-api
+        # TODO: make self.transformed_observation_spaces readonly
         if self._combine_interoception_and_vision:
             self.transformed_observation_spaces = {
                 agent: Box(
@@ -553,12 +557,6 @@ class GridworldZooBaseEnv:
             }
         else:
             return self._last_infos[agent][INFO_OBSERVATION_COORDINATES]
-
-    # def observation_space(self, agent: str):
-    #    return self._observation_spaces[agent]
-
-    # def action_space(self, agent: str):
-    #    return self._action_spaces[agent]
 
 
 class SavannaGridworldParallelEnv(GridworldZooBaseEnv, GridworldZooParallelEnv):

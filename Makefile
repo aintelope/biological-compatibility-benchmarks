@@ -23,7 +23,8 @@ clean-venv: ## remove virtual environment
 	if [ -d $(VENV) ]; then rm -r $(VENV) ; fi;
 
 install: ## Install packages
-	pip uninstall -y ai_safety_gridworlds 2>&1 | grep -v "not installed"
+	# cat supresses error that grep generates when it does not find a match
+	pip uninstall -y ai_safety_gridworlds 2>&1 | grep -v "not installed" | cat
 	pip install -r requirements/api.txt
 
 install-dev: ## Install development packages
@@ -31,8 +32,8 @@ install-dev: ## Install development packages
 
 install-all: install install-dev ## install all packages
 
-build-local: ## install the project locally
-	pip install -e .
+# build-local: ## install the project locally
+#	pip install -e .
 
 # ---------- testing ----------
 .PHONY: tests-local

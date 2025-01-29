@@ -5,6 +5,8 @@
 # Repository: https://github.com/aintelope/biological-compatibility-benchmarks
 
 import os
+import time
+import datetime
 
 from progressbar import ProgressBar
 
@@ -22,13 +24,16 @@ else:
 from filelock import FileLock
 
 
-def wait_for_enter(message):
+def wait_for_enter(message=None):
     if os.name == "nt":
         import msvcrt
 
-        print(message)
+        if message is not None:
+            print(message)
         msvcrt.getch()  # Uses less CPU on Windows than input() function. This becomes perceptible when multiple console windows with Python are waiting for input. Note that the graph window will be frozen, but will still show graphs.
     else:
+        if message is None:
+            message = ""
         input(message)
 
 
@@ -104,6 +109,42 @@ class RobustProgressBar(ProgressBar):
 
 
 # / class RobustProgressBar(ProgressBar):
+
+
+def get_now_str():
+    now_str = datetime.datetime.strftime(datetime.datetime.now(), "%m.%d %H:%M:%S")
+    return now_str
+
+
+# / def get_now_str():
+
+
+# https://stackoverflow.com/questions/5849800/tic-toc-functions-analog-in-python
+class Timer(object):
+    def __init__(self, name=None, quiet=False):
+        self.name = name
+        self.quiet = quiet
+
+    def __enter__(self):
+        if not self.quiet and self.name:
+            print(get_now_str() + " : " + self.name + "...")
+
+        self.tstart = time.time()
+
+    def __exit__(self, type, value, traceback):
+        elapsed = time.time() - self.tstart
+
+        if not self.quiet:
+            if self.name:
+                print(
+                    get_now_str() + " : " + self.name + " totaltime: {}".format(elapsed)
+                )
+            else:
+                print(get_now_str() + " : " + "totaltime: {}".format(elapsed))
+        # / if not quiet:
+
+
+# / class Timer(object):
 
 
 # There does not seem to be a cross platform semaphore class available, so lets create one by combining platform specific semaphores.
