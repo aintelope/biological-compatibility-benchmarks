@@ -147,9 +147,11 @@ Aintelope code base is compatible with Windows. No extra steps needed. GPU compu
 
 * A working paper related to this repo: Pihlakas, R & Pyykkö, J. "From homeostasis to resource sharing: Biologically and economically compatible multi-objective multi-agent AI safety benchmarks". Arxiv (2024). https://arxiv.org/abs/2410.00081
 
+
 # Blog posts
 
 * Why modelling multi-objective homeostasis is essential for AI alignment (and how it helps with AI safety as well) (2025) https://www.lesswrong.com/posts/vGeuBKQ7nzPnn5f7A/why-modelling-multi-objective-homeostasis-is-essential-for
+
 
 # Presentations
 
@@ -161,6 +163,12 @@ Aintelope code base is compatible with Windows. No extra steps needed. GPU compu
     - The subject of the presentation was describing why we should consider fundamental yet neglected principles from biology and economics when thinking about AI alignment, and how these considerations will help with AI safety as well (alignment and safety were treated in this research explicitly as separate aspects, which both benefit from consideration of aforementioned principles). These principles include homeostasis and diminishing returns in utility functions, and sustainability. Next I will introduce multi-objective and multi-agent gridworlds-based benchmark environments we have created for measuring the performance of machine learning algorithms and AI agents in relation to their capacity for biological and economical alignment. The benchmarks are now available as a public repo. At the end I will mention some of the related themes and dilemmas not yet covered by these benchmarks, and describe new benchmark environments we have planned for future implementation.
     - Recording: https://www.youtube.com/watch?v=DCUqqyyhcko
     - Slides: https://bit.ly/beamm 
+
+
+# Related work
+
+* BioBlue: Biologically and economically aligned AI safety benchmarks for LLM-s with simplified observation format (Roland Pihlakas, Shruti Datta Gupta, Sruthi Kuriakose 2025) [repo](https://github.com/levitation-opensource/bioblue) and [PDF report](https://github.com/levitation-opensource/bioblue/blob/main/BioBlue%20-%20Biologically%20and%20economically%20aligned%20AI%20safety%20benchmarks%20for%20LLMs.pdf)
+
 
 # License
 
