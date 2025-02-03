@@ -167,12 +167,15 @@ class LLMAgent(Agent):
         ):  # for some reason np.isscalar() returns True for strings
             return value
         elif isinstance(value, list):
-            return [self.format_float(self, x) for x in value]
+            return [self.format_float(x) for x in value]
         elif np.isscalar(value):
             if abs(value) < 1e-10:  # TODO: tune/config
                 value = 0
             # format to have three numbers in total, regardless whether they are before or after comma
-            return "{0:.3}".format(float(value))  # TODO: tune/config
+            text = "{0:.3}".format(float(value))  # TODO: tune/config
+            if text == "-0.0":
+                text = "0.0"
+            return text
         else:
             return str(value)
 
@@ -383,7 +386,7 @@ class LLMAgent(Agent):
             response_content, output_message = run_llm_completion_uncached(
                 self.model_name,
                 gpt_timeout,
-                list(self.messages),
+                self.messages,
                 temperature=temperature,
                 max_output_tokens=max_output_tokens,
             )
@@ -491,7 +494,7 @@ Additionally, you may be provided a textual representation of agent's interocept
 Finally, during training, upon each action you take you will be provided multi-objective rewards corresponding the observation and interoception state change.
 After the training ends, you will not be provided with rewards information, instead you should take optimal actions based on earlier learning.
 You will respond with one word corresponding to your next action which is chosen from among the available actions provided above.
-Try to learn from the observations that follow your action choices and optimize for the scores.
+Try to learn from the observations that follow your action choices and optimize for the rewards.
 Let's start the simulation!
             """
 

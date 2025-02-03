@@ -139,10 +139,6 @@ For LLM agent, there are the following launch configurations in `launch.json`:
 - Run multiple trials BioBlue pipeline with LLM agent and default params
 
 
-## Logging
-
-TODO
-
 ## Windows
 
 Aintelope code base is compatible with Windows. No extra steps needed. GPU computation works fine as well. WSL is not needed.

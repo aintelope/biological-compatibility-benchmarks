@@ -84,7 +84,9 @@ class EventLog(object):
                 encoding="utf-8",
             )  # csv writer creates its own newlines therefore need to set newline to empty string here
 
-        self.writer = csv.writer(self.file, quoting=csv.QUOTE_MINIMAL, delimiter=",")
+        self.writer = csv.writer(
+            self.file, quoting=csv.QUOTE_MINIMAL, delimiter=","
+        )  # TODO: use TSV format instead
 
         if (
             write_header
@@ -102,6 +104,16 @@ class EventLog(object):
 
             # if type(col) == datetime.datetime:
             #    col = datetime.datetime.strftime(col, '%Y.%m.%d-%H.%M.%S')
+
+            if isinstance(col, str):
+                col = (
+                    col.strip()
+                    .replace("\r", "\\r")
+                    .replace("\n", "\\n")
+                    .replace("\t", "\\t")
+                )  # CSV/TSV format does not support these characters
+                # col = re.sub(r"[\n\r\t]", " ", col.strip())   # CSV/TSV format does not support these characters
+
             transformed_cols.append(col)
 
         self.writer.writerow(transformed_cols)

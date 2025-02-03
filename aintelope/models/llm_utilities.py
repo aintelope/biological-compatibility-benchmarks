@@ -86,10 +86,8 @@ def completion_with_backoff(
 
         return (response_content, finish_reason)
 
-    except Exception as ex:  # httpcore.ReadTimeout
-        t = type(
-            ex
-        )  # TODO!!!: pause on error, wait for use input in case of lack of credits
+    except Exception as ex:
+        t = type(ex)
         if (
             t is httpcore.ReadTimeout or t is httpx.ReadTimeout
         ):  # both exception types have occurred
