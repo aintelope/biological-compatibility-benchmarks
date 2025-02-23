@@ -146,16 +146,19 @@ def run_pipeline(cfg: DictConfig) -> None:
 
                         score_dimensions = get_score_dimensions(experiment_cfg)
 
+                        num_actual_train_episodes = -1
                         if (
                             cfg.hparams.num_pipeline_cycles == 0
                         ):  # in case of 0 pipeline cycle, run testing inside the same cycle immediately after each environment's training ends.
-                            run_experiment(
+                            num_actual_train_episodes = run_experiment(
                                 experiment_cfg,
                                 experiment_name=env_conf_name,
                                 score_dimensions=score_dimensions,
                                 test_mode=False,
                                 i_pipeline_cycle=i_pipeline_cycle,
                             )
+                        elif test_mode:
+                            pass  # TODO: optional: obtain num_actual_train_episodes. But this is not too important: in case of training a model over one or more pipeline cycles, the final test cycle gets its own i_pipeline_cycle index, therefore it is clearly distinguishable anyway
 
                         run_experiment(
                             experiment_cfg,
@@ -163,6 +166,7 @@ def run_pipeline(cfg: DictConfig) -> None:
                             score_dimensions=score_dimensions,
                             test_mode=test_mode,
                             i_pipeline_cycle=i_pipeline_cycle,
+                            num_actual_train_episodes=num_actual_train_episodes,
                         )
 
                         # torch.cuda.empty_cache()

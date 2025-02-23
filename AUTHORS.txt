@@ -1,19 +1,19 @@
-Total commits: 915
-Total ctimes: 3303
-Total files: 158
-Total loc: 13873
+Total commits: 923
+Total ctimes: 3421
+Total files: 175
+Total loc: 16931
 | Author                              |   loc |   coms |   fils |  distribution   |
 |:------------------------------------|------:|-------:|-------:|:----------------|
-| Roland Pihlakas                     | 12664 |    408 |     80 | 91.3/44.6/50.6  |
-| Joel Pyykkö                         |   379 |    128 |     12 | 2.7/14.0/ 7.6   |
-| derdre                              |   373 |     62 |     23 | 2.7/ 6.8/14.6   |
-| a.kochanke                          |   242 |    145 |     20 | 1.7/15.8/12.7   |
-| Gunnar Zarncke                      |   127 |      1 |      1 | 0.9/ 0.1/ 0.6   |
-| Nathan Helm-Burger                  |    54 |     63 |      9 | 0.4/ 6.9/ 5.7   |
-| Hauke Rehfeld                       |    11 |     57 |      3 | 0.1/ 6.2/ 1.9   |
-| Orpheus Lummis                      |     9 |      2 |      3 | 0.1/ 0.2/ 1.9   |
-| U-SKETCHER\Gunnar Zarncke           |     6 |     12 |      3 | 0.0/ 1.3/ 1.9   |
-| ak                                  |     6 |      1 |      2 | 0.0/ 0.1/ 1.3   |
+| Roland Pihlakas                     | 15731 |    416 |     97 | 92.9/45.1/55.4  |
+| Joel Pyykkö                         |   374 |    128 |     12 | 2.2/13.9/ 6.9   |
+| derdre                              |   373 |     62 |     23 | 2.2/ 6.7/13.1   |
+| a.kochanke                          |   239 |    145 |     20 | 1.4/15.7/11.4   |
+| Gunnar Zarncke                      |   127 |      1 |      1 | 0.8/ 0.1/ 0.6   |
+| Nathan Helm-Burger                  |    54 |     63 |      9 | 0.3/ 6.8/ 5.1   |
+| Hauke Rehfeld                       |    10 |     57 |      3 | 0.1/ 6.2/ 1.7   |
+| Orpheus Lummis                      |     9 |      2 |      3 | 0.1/ 0.2/ 1.7   |
+| U-SKETCHER\Gunnar Zarncke           |     6 |     12 |      3 | 0.0/ 1.3/ 1.7   |
+| ak                                  |     6 |      1 |      2 | 0.0/ 0.1/ 1.1   |
 | postuur                             |     1 |     33 |      1 | 0.0/ 3.6/ 0.6   |
 | Biological Compatibility Benchmarks |     1 |      1 |      1 | 0.0/ 0.1/ 0.6   |
 | NathanNeuro                         |     0 |      2 |      0 | 0.0/ 0.2/ 0.0   |
