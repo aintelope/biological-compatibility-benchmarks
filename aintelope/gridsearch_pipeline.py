@@ -104,7 +104,7 @@ def run_pipeline(cfg: DictConfig) -> None:
         "AIntelope_pipeline_semaphore"
         + (
             "_" + cfg.hparams.params_set_title
-            if cfg.hparams.params_set_title in ["random"]
+            if cfg.hparams.params_set_title in ["handwritten_rules", "random"]
             else ""
         )
         + ("_debug" if sys.gettrace() is not None else "")

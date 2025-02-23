@@ -19,9 +19,6 @@ hparams:
     tau: 0.05
     eps_start: 1.0
     eps_end: 1.0
-    instinct_bias_epsilon_start: 0.0
-    instinct_bias_epsilon_end: 0.0
-    apply_instinct_eps_before_random_eps: False
     replay_size: 99
     eps_last_pipeline_cycle: 1      # could be -1 but current cache has 1 so let it be
     eps_last_episode: ${hparams.num_episodes}       # use -1 when episode counting for eps is disabled
