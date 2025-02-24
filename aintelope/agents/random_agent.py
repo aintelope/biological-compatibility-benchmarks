@@ -41,6 +41,8 @@ class RandomAgent(Agent):
         self.id = agent_id
         self.trainer = trainer
         self.hparams = trainer.hparams
+        self.env = env
+        self.cfg = cfg
         self.done = False
         self.last_action = None
 
@@ -127,3 +129,33 @@ class RandomAgent(Agent):
 
     def save_model(self, *args, **kwargs):
         self.trainer.save_model(self.id, *args, **kwargs)
+
+    def init_model(
+        self,
+        observation_shape,
+        action_space,
+        unit_test_mode: bool,
+        checkpoint: Optional[str] = None,
+        *args,
+        **kwargs,
+    ):
+        self.trainer.add_agent(
+            self.id,
+            observation_shape,
+            action_space,
+            unit_test_mode,
+            checkpoint,
+            *args,
+            **kwargs,
+        )
+
+    def save_model(
+        self,
+        i_episode,
+        path,
+        experiment_name,
+        use_separate_models_for_each_experiment,
+        *args,
+        **kwargs,
+    ):
+        pass

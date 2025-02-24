@@ -15,16 +15,15 @@ log_dir: ${log_dir_root}/${timestamp_pid_uuid}/
 experiment_dir: ${log_dir}/${experiment_name}/
 
 trainer_params:
-  resume_from_checkpoint: False
-  num_workers: 4
-  # max_epochs: 10        # unused
+  num_workers: 4        # unused        # TODO
   checkpoint: ${log_dir}/checkpoints/
-  device: gpu
+  device: gpu        # unused        # TODO
   verbose: false
 
 hparams:
   gridsearch_trial_no: 0
   params_set_title: "handwritten_rules"
+  do_not_enforce_checkpoint_file_existence_during_test: True
   aggregated_results_file: outputs/${hparams.params_set_title}.jsonl
   env: savanna-safetygrid-parallel-v1
   env_entry_point: "aintelope.environments.savanna_safetygrid:SavannaGridworldParallelEnv"
@@ -34,7 +33,6 @@ hparams:
   #env_type: zoo
   unit_test_mode: False      # is set during tests in order to speed up DQN computations
   agent_class: handwritten_rules_agent
-  warm_start_steps: 0       # not used at the moment, except for the unit tests
   save_frequency: 10 # how often to save a model
   use_separate_models_for_each_experiment: True
   agent_params:
@@ -49,8 +47,8 @@ hparams:
     eps_last_frame: ${hparams.env_params.num_iters}       # use -1 when iteration counting for eps is disabled
   trial_length: -1 # 10
   num_pipeline_cycles: 0
-  num_episodes: 2 # how long to train. # TODO: move num_episodes to model_params
-  test_episodes: 2 # will be added to train episodes
+  num_episodes: 0 # how long to train. # TODO: move num_episodes to model_params
+  test_episodes: 100 # will be added to train episodes
   env_params:
     combine_interoception_and_vision: False  # needs to be set to True for OpenAI baselines learning algorithms
     scalarize_rewards: False     # needs to be set to True for OpenAI baselines learning algorithms
@@ -71,7 +69,6 @@ hparams:
     # but using a same model instance), 3 - once per training episode.
     map_randomization_frequency: 3 
     render_mode: null
-    # render_map_max: 5     # this field is currently not used anywhere in code
     #
     amount_agents: 1  
     amount_grass_patches: 1
@@ -116,6 +113,11 @@ hparams:
     DRINK_DEFICIENCY_THRESHOLD: -3
     DRINK_GROWTH_LIMIT: 20
     DRINK_REGROWTH_EXPONENT: 1.1
+    # gold and silver diminishing returns parameters
+    GOLD_VISITS_LOG_BASE: 1.5
+    SILVER_VISITS_LOG_BASE: 1.5
+    # predator parameters
+    PREDATOR_MOVEMENT_PROBABILITY: 0.25  
     #
     # 0 - fixed, 1 - relative, depending on last move, 2 - relative,
     # controlled by separate turning actions.
