@@ -15,11 +15,9 @@ log_dir: ${log_dir_root}/${timestamp_pid_uuid}/
 experiment_dir: ${log_dir}/${experiment_name}/
 
 trainer_params:
-  resume_from_checkpoint: False
   num_workers: 4        # unused        # TODO
-  # max_epochs: 10        # unused
   checkpoint: ${log_dir}/checkpoints/
-  device: gpu
+  device: gpu        # unused        # TODO
   verbose: false
 
 hparams:
@@ -54,8 +52,7 @@ hparams:
   env_params:
     combine_interoception_and_vision: True  # needs to be set to True for OpenAI baselines learning algorithms
     scalarize_rewards: False     # needs to be set to True for OpenAI baselines learning algorithms
-    # TODO: move num_iters to model_params
-    num_iters: 300 # duration of a single episode. NB! warm_start_steps will be subtracted from this value
+    num_iters: 400 # duration of a single episode. NB! warm_start_steps will be subtracted from this value
     env_experiment: ai_safety_gridworlds.aintelope_savanna
     level: 0
     map_max: 7     
@@ -71,7 +68,6 @@ hparams:
     # but using a same model instance), 3 - once per training episode.
     map_randomization_frequency: 3 
     render_mode: null
-    # render_map_max: 5     # this field is currently not used anywhere in code
     #
     amount_agents: 1  
     amount_grass_patches: 1

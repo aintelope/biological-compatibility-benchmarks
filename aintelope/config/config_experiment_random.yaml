@@ -33,8 +33,7 @@ hparams:
   #env_type: zoo
   unit_test_mode: False      # is set during tests in order to speed up DQN computations
   agent_class: random_agent
-  warm_start_steps: 0       # not used at the moment, except for the unit tests
-  save_frequency: 0 # how often to save a model
+  save_frequency: 0 # how often to save a model. 0 means that the model is saved only at the end, improving training performance
   use_separate_models_for_each_experiment: True
   agent_params: {}
   model_params:
