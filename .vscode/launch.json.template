@@ -27,7 +27,20 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "showUncaughtExceptions": true,
-            "args": ["--config-name=config_experiment_random"],
+            "args": [ "--config-name=config_experiment_random" ],
+            "env": {
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        {
+            "name": "Python: Run single environment with handwritten rules agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/nonpipeline.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_handwritten_rules" ],
             "env": {
                 //"PYTHONPATH": "your_path_here"
             }
@@ -53,9 +66,51 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "showUncaughtExceptions": true,
-            "args": ["--config-name=config_experiment_exampleagent"],
+            "args": [ "--config-name=config_experiment_exampleagent" ],
             "env": {
                 //"PYTHONPATH": "your_path_here"
+            }
+        },
+        //-----------------------------------------------------------------------------------
+        // Configurations to run single environment with OpenAI Baseline 3 agent
+        //-----------------------------------------------------------------------------------
+        {
+            "name": "Python: Run single environment with A2C agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/nonpipeline.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_score_a2c" ],
+            "env": {
+                "PYTHONPATH": "your_path_here"
+            }
+        },
+        {
+            "name": "Python: Run single environment with PPO agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/nonpipeline.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_score_ppo" ],
+            "env": {
+                "PYTHONPATH": "your_path_here"
+            }
+        },
+        {
+            "name": "Python: Run single environment with DQN agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/nonpipeline.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_score_dqn" ],
+            "env": {
+                "PYTHONPATH": "your_path_here"
             }
         },
         //-----------------------------------------------------------------------------------
@@ -69,9 +124,37 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "showUncaughtExceptions": true,
-            "args": ["--config-name=config_experiment_random"],
+            "args": [ "--config-name=config_experiment_random" ],
             "env": {
-                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        {
+            "name": "Python: Run pipeline with handwritten rules agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/pipeline.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_handwritten_rules" ],
+            "env": {
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        {
+            "name": "Python: Run pipeline with LLM agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/pipeline.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_llm_agent" ],
+            "env": {
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -97,9 +180,54 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "showUncaughtExceptions": true,
-            "args": ["--config-name=config_experiment_exampleagent"],
+            "args": [ "--config-name=config_experiment_exampleagent" ],
             "env": {
-                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        //-----------------------------------------------------------------------------------
+        // Configurations to run pipeline with OpenAI Baseline 3 agent
+        //-----------------------------------------------------------------------------------
+        {
+            "name": "Python: Run pipeline with A2C agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/pipeline.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_score_a2c" ],
+            "env": {
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        {
+            "name": "Python: Run pipeline with PPO agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/pipeline.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_score_ppo" ],
+            "env": {
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        {
+            "name": "Python: Run pipeline with DQN agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/pipeline.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_score_dqn" ],
+            "env": {
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -114,9 +242,9 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "showUncaughtExceptions": true,
-            "args": ["--config-name=config_experiment_exampleagent"],
+            "args": [ "--config-name=config_experiment_exampleagent" ],
             "env": {
-                "PIPELINE_CONFIG": "config_pipeline_exampleagent10.yaml",
+                "PIPELINE_CONFIG": "config_pipeline_exampleagent10.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -131,10 +259,25 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "showUncaughtExceptions": true,
-            "args": ["--config-name=config_experiment_random"],
+            "args": [ "--config-name=config_experiment_random" ],
             "env": {
                 "PIPELINE_CONFIG": "config_pipeline.yaml",
-                "GRIDSEARCH_CONFIG": "config_trials_random.yaml",
+                "GRIDSEARCH_CONFIG": "config_trials_random.yaml"
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        {
+            "name": "Python: Run multiple trials with handwritten rules agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/gridsearch.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_handwritten_rules" ],
+            "env": {
+                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "GRIDSEARCH_CONFIG": "config_trials_handwritten_rules.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -176,10 +319,58 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "showUncaughtExceptions": true,
-            "args": ["--config-name=config_experiment_exampleagent"],
+            "args": [ "--config-name=config_experiment_exampleagent" ],
             "env": {
                 "PIPELINE_CONFIG": "config_pipeline.yaml",
-                "GRIDSEARCH_CONFIG": "config_trials_exampleagent.yaml",
+                "GRIDSEARCH_CONFIG": "config_trials_exampleagent.yaml"
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        //-----------------------------------------------------------------------------------
+        // Configurations to run multiple trials pipeline with OpenAI Baseline 3 agent
+        //-----------------------------------------------------------------------------------
+        {
+            "name": "Python: Run multiple trials pipeline with A2C agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/gridsearch.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_score_a2c" ],
+            "env": {
+                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "GRIDSEARCH_CONFIG": "config_trials_score_a2c.yaml"
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        {
+            "name": "Python: Run multiple trials pipeline with PPO agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/gridsearch.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_score_ppo" ],
+            "env": {
+                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "GRIDSEARCH_CONFIG": "config_trials_score_ppo.yaml"
+                //"PYTHONPATH": "your_path_here"
+            }
+        },
+        {
+            "name": "Python: Run multiple trials pipeline with DQN agent and default params",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "aintelope/gridsearch.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "showUncaughtExceptions": true,
+            "args": [ "--config-name=config_experiment_score_dqn" ],
+            "env": {
+                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "GRIDSEARCH_CONFIG": "config_trials_score_dqn.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -194,10 +385,10 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "showUncaughtExceptions": true,
-            "args": ["--config-name=config_experiment_exampleagent"],
+            "args": [ "--config-name=config_experiment_exampleagent" ],
             "env": {
                 "PIPELINE_CONFIG": "config_pipeline_exampleagent10.yaml",
-                "GRIDSEARCH_CONFIG": "config_trials_exampleagent.yaml",
+                "GRIDSEARCH_CONFIG": "config_trials_exampleagent.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -212,10 +403,10 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "showUncaughtExceptions": true,
-            "args": ["--config-name=config_experiment_exampleagent"],
+            "args": [ "--config-name=config_experiment_exampleagent" ],
             "env": {
                 "PIPELINE_CONFIG": "config_pipeline.yaml",
-                "GRIDSEARCH_CONFIG": "config_gridsearch_exampleagent.yaml",
+                "GRIDSEARCH_CONFIG": "config_gridsearch_exampleagent.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -232,7 +423,7 @@
             "showUncaughtExceptions": true,
             "args": [],
             "env": {
-                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -246,7 +437,7 @@
             "showUncaughtExceptions": true,
             "args": [],
             "env": {
-                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -260,7 +451,7 @@
             "showUncaughtExceptions": true,
             "args": [],
             "env": {
-                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -274,7 +465,7 @@
             "showUncaughtExceptions": true,
             "args": [],
             "env": {
-                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -288,7 +479,7 @@
             "showUncaughtExceptions": true,
             "args": [],
             "env": {
-                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -302,7 +493,7 @@
             "showUncaughtExceptions": true,
             "args": [],
             "env": {
-                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -316,7 +507,7 @@
             "showUncaughtExceptions": true,
             "args": [],
             "env": {
-                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -330,7 +521,7 @@
             "showUncaughtExceptions": true,
             "args": [],
             "env": {
-                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
         },
@@ -344,9 +535,9 @@
             "showUncaughtExceptions": true,
             "args": [],
             "env": {
-                "PIPELINE_CONFIG": "config_pipeline.yaml",
+                "PIPELINE_CONFIG": "config_pipeline.yaml"
                 //"PYTHONPATH": "your_path_here"
             }
-        },        
+        }
     ]
 }
