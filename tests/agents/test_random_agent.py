@@ -24,7 +24,7 @@ def test_random_agent_in_savanna_gridworlds_sequential(
 ) -> None:
     full_params = tparams_hparams
     params_savanna_zoo = {
-        "agent_id": "random_agent",
+        "agent_class": "random_agent",
         "env": "savanna-safetygrid-sequential-v1",
         "env_entry_point": (
             "aintelope.environments.savanna_safetygrid:SavannaGridworldSequentialEnv"
@@ -51,7 +51,7 @@ def test_random_agent_in_savanna_gridworlds_sequential_with_death(
 ) -> None:
     full_params = tparams_hparams
     params_savanna_zoo = {
-        "agent_id": "random_agent",
+        "agent_class": "random_agent",
         "env": "savanna-safetygrid-sequential-v1",
         "env_entry_point": (
             "aintelope.environments.savanna_safetygrid:SavannaGridworldSequentialEnv"
@@ -79,7 +79,7 @@ def test_random_agent_in_savanna_gridworlds_parallel(
 ) -> None:
     full_params = tparams_hparams
     params_savanna_zoo = {
-        "agent_id": "random_agent",
+        "agent_class": "random_agent",
         "env": "savanna-safetygrid-parallel-v1",
         "env_entry_point": (
             "aintelope.environments.savanna_safetygrid:SavannaGridworldParallelEnv"
@@ -106,7 +106,7 @@ def test_random_agent_in_savanna_gridworlds_parallel_with_death(
 ) -> None:
     full_params = tparams_hparams
     params_savanna_zoo = {
-        "agent_id": "random_agent",
+        "agent_class": "random_agent",
         "env": "savanna-safetygrid-parallel-v1",
         "env_entry_point": (
             "aintelope.environments.savanna_safetygrid:SavannaGridworldParallelEnv"

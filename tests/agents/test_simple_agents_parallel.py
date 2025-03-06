@@ -49,7 +49,7 @@ def test_randomwalkagent_in_savanna_gridworlds_parallel(
 ) -> None:
     full_params = tparams_hparams
     params_randomwalkagent = {
-        "agent": "random_walk_agent",
+        "agent_class": "random_walk_agent",
         "env": "savanna-safetygrid-parallel-v1",
         "env_entry_point": (
             "aintelope.environments.savanna_safetygrid:SavannaGridworldParallelEnv"
@@ -76,7 +76,7 @@ def test_randomwalkagent_in_savanna_gridworlds_parallel(
 # ) -> None:
 #    full_params = tparams_hparams
 #    params_perfectpredictionagent = {
-#        "agent": "one_step_perfect_prediction_agent",
+#        "agent_class": "one_step_perfect_prediction_agent",
 #        "env": "savanna-safetygrid-parallel-v1",
 #        "env_entry_point": (
 #            "aintelope.environments.savanna_safetygrid:SavannaGridworldParallelEnv"
@@ -105,7 +105,7 @@ def test_randomwalkagent_in_savanna_gridworlds_parallel(
 # ) -> None:
 #    full_params = tparams_hparams
 #    params_weightoptimizationagent = {
-#        "agent": "iterative_weight_optimization_agent",
+#        "agent_class": "iterative_weight_optimization_agent",
 #        "env": "savanna-safetygrid-parallel-v1",
 #        "env_entry_point": (
 #            "aintelope.environments.savanna_safetygrid:SavannaGridworldParallelEnv"
