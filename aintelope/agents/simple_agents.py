@@ -24,7 +24,8 @@ INF = 9999999999
 
 class RandomWalkAgent(QAgent):
     def get_action(self, *args, **kwargs) -> int:
-        return self.trainer.action_space.sample()
+        action_space = self.trainer.action_spaces[self.id]
+        return action_space.sample()
 
 
 # TODO: these agents are currently not used

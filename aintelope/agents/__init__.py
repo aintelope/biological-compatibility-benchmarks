@@ -8,6 +8,9 @@ from typing import Mapping, Type
 from aintelope.agents.abstract_agent import Agent
 from aintelope.agents.example_agent import ExampleAgent
 
+from aintelope.agents.random_agent import RandomAgent
+from aintelope.agents.handwritten_rules_agent import HandwrittenRulesAgent
+
 from aintelope.agents.q_agent import QAgent
 
 from aintelope.agents.llm_agent import LLMAgent
@@ -42,5 +45,7 @@ register_agent_class("random_walk_agent", RandomWalkAgent)
 
 register_agent_class("q_agent", QAgent)
 register_agent_class("example_agent", ExampleAgent)
+register_agent_class("random_agent", RandomAgent)
+register_agent_class("handwritten_rules_agent", HandwrittenRulesAgent)
 
 register_agent_class("llm_agent", LLMAgent)
