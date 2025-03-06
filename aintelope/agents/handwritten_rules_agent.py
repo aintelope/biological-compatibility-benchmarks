@@ -20,8 +20,8 @@ from aintelope.environments.savanna_safetygrid import (
     ACTION_RELATIVE_COORDINATE_MAP,
 )
 
-from aintelope.agents.handwritten_rules.safetygrid_handwritten_rules import (
-    available_handwritten_rules_dict,
+from aintelope.agents.handwritten_rules.savanna_safetygrid_handwritten_rules import (
+    savanna_safetygrid_available_handwritten_rules_dict,
     format_float,
 )
 
@@ -229,7 +229,9 @@ class HandwrittenRulesAgent(Agent):
         if issubclass(
             self.env_class, GridworldZooBaseEnv
         ):  # radically different types of environments may need different handwritten_rules
-            available_handwritten_rules_dict_local = available_handwritten_rules_dict
+            available_handwritten_rules_dict_local = (
+                savanna_safetygrid_available_handwritten_rules_dict
+            )
 
         logger.debug(f"target_handwritten_rules: {self.target_handwritten_rules}")
         for handwritten_rule_name in self.target_handwritten_rules:

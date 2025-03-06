@@ -500,7 +500,7 @@ class AntiMovement:
         return rewards, event_signal
 
 
-available_handwritten_rules_dict = {
+savanna_safetygrid_available_handwritten_rules_dict = {
     "food": Food,  # TODO: split into sub-handwritten_rules
     "drink": Drink,  # TODO: split into sub-handwritten_rules
     "gold": Gold,
