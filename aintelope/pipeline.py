@@ -103,15 +103,21 @@ def run_pipeline(cfg: DictConfig) -> None:
         ),  # Linux does not unlock semaphore after a process gets killed, therefore disabling Semaphore under Linux until this gets resolved.
     ) as semaphore:
         print("Semaphore acquired...")
-        max_pipeline_cycle = (
-            cfg.hparams.num_pipeline_cycles + 1
-            if cfg.hparams.num_pipeline_cycles >= 1
-            else 1
-        )  # Last +1 cycle is for testing. In case of 0 pipeline cycle, run testing inside the same cycle immediately after each environment's training ends.
+
+        # In case of 0 pipeline cycles (num_pipeline_cycles == 0), each environment has its own model. In this case run training and testing inside the same cycle immediately after each other.
+        # In case of (num_pipeline_cycles > 0), train a SHARED model over all environments in the pipeline steps for num_pipeline_cycles. Then test that shared model for one additional cycle.
+        # Therefore, the + 1 cycle is for testing. In case of (num_pipeline_cycles == 0), run testing inside the same cycle immediately after each environment's training ends.
+        max_pipeline_cycle = cfg.hparams.num_pipeline_cycles + 1
         with RobustProgressBar(
             max_value=max_pipeline_cycle
         ) as pipeline_cycle_bar:  # this is a slow task so lets use a progress bar
             for i_pipeline_cycle in range(0, max_pipeline_cycle):
+                # In case of (num_pipeline_cycles == 0), each environment has its own model. In this case run training and testing inside the same cycle immediately after each other.
+                # In case of (num_pipeline_cycles > 0), train a SHARED model over all environments in the pipeline steps for num_pipeline_cycles. Then test that shared model for one additional cycle
+                train_mode = (
+                    i_pipeline_cycle < cfg.hparams.num_pipeline_cycles
+                    or cfg.hparams.num_pipeline_cycles == 0
+                )
                 test_mode = i_pipeline_cycle == cfg.hparams.num_pipeline_cycles
 
                 with RobustProgressBar(
@@ -148,8 +154,8 @@ def run_pipeline(cfg: DictConfig) -> None:
 
                         num_actual_train_episodes = -1
                         if (
-                            cfg.hparams.num_pipeline_cycles == 0
-                        ):  # in case of 0 pipeline cycle, run testing inside the same cycle immediately after each environment's training ends.
+                            train_mode and test_mode
+                        ):  # In case of (num_pipeline_cycles == 0), each environment has its own model. In this case run training and testing inside the same cycle immediately after each other.
                             num_actual_train_episodes = run_experiment(
                                 experiment_cfg,
                                 experiment_name=env_conf_name,
