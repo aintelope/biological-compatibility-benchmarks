@@ -53,9 +53,9 @@ class EventLog(object):
         gzip_log=False,
         gzip_compresslevel=None,
     ):
-        record_path = Path(os.path.join(experiment_dir, events_fname))
-        logger.info(f"Saving training records to disk at {record_path}")
-        record_path.parent.mkdir(exist_ok=True, parents=True)
+        self.record_path = Path(os.path.join(experiment_dir, events_fname))
+        logger.info(f"Saving training records to disk at {self.record_path}")
+        self.record_path.parent.mkdir(exist_ok=True, parents=True)
 
         # speed up CSV generation by not saving arrays
         # TODO: save arrays to separate pickle files
@@ -66,18 +66,18 @@ class EventLog(object):
         if gzip_log:
             if gzip_compresslevel is None:
                 gzip_compresslevel = self.default_gzip_compresslevel
-            write_header = not os.path.exists(record_path + ".gz")
+            write_header = not os.path.exists(self.record_path + ".gz")
             self.file = gzip.open(
-                record_path + ".gz",
+                self.record_path + ".gz",
                 mode="at",
                 newline="",
                 encoding="utf-8",
                 compresslevel=gzip_compresslevel,
             )  # csv writer creates its own newlines therefore need to set newline to empty string here     # TODO: buffering for gzip
         else:
-            write_header = not os.path.exists(record_path)
+            write_header = not os.path.exists(self.record_path)
             self.file = open(
-                record_path,
+                self.record_path,
                 mode="at",
                 buffering=1024 * 1024,
                 newline="",

@@ -186,7 +186,7 @@ class SB3BaseAgent(Agent):
         cfg: DictConfig,
         test_mode: bool = False,
         i_pipeline_cycle: int = 0,
-        events: pd.DataFrame = None,
+        events: pd.DataFrame = None,  # TODO: this is no longer a DataFrame, but an EventLog
         score_dimensions: list = [],
         progressbar: RobustProgressBar = None,
         **kwargs,
@@ -231,7 +231,7 @@ class SB3BaseAgent(Agent):
 
     def get_action(
         self,
-        observation: Tuple[
+        observation: Tuple[  # TODO: SB3 observation is NOT a Tuple
             npt.NDArray[ObservationFloat], npt.NDArray[ObservationFloat]
         ] = None,
         info: dict = {},
@@ -298,6 +298,9 @@ class SB3BaseAgent(Agent):
         self.info = infos[self.id]
         self.states = states
         self.infos = infos
+
+    def env_pre_step_callback(self, actions):
+        return actions  # you can modify the actions in this method but keep in mind that the calling RL algorithm might not become aware of the modified actions later
 
     def parallel_env_post_step_callback(
         self,
@@ -498,6 +501,7 @@ class SB3BaseAgent(Agent):
         self.env._post_reset_callback2 = (
             self.env_post_reset_callback
         )  # post-reset callback is same for both parallel and sequential environment
+        self.env._pre_step_callback2 = self.env_pre_step_callback
         if isinstance(self.env, ParallelEnv):
             self.env._post_step_callback2 = self.parallel_env_post_step_callback
         else:

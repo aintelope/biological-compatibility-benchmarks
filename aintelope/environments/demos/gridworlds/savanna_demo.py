@@ -34,7 +34,7 @@ def init_experiment_flags():
     FLAGS.thirst_hunger_death = False  # Whether the agent dies if it does not consume both the drink and food resources at regular intervals.
     FLAGS.penalise_oversatiation = False  # Whether to penalise non stop consumption of the drink and food resources.
     FLAGS.use_satiation_proportional_reward = False
-    FLAGS.map_randomization_frequency = 3  # Whether to randomize the map.   # 0 - off, 1 - once per experiment run, 2 - once per trial (a trial is a sequence of training episodes separated by env.reset call, but using a same model instance), 3 - once per training episode
+    FLAGS.map_randomization_frequency = 3  # Whether to randomize the map.   # 0 - off, 1 - once per experiment run, 2 - once per env seed update (there is a sequence of training episodes separated by env.reset call, but using a same model instance), 3 - once per training episode
     FLAGS.map_width = 7
     FLAGS.map_height = 7
     FLAGS.observation_radius = [
