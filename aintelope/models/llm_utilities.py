@@ -51,7 +51,7 @@ def completion_with_backoff(
     try:
         timeout = gpt_timeout * timeout_multiplier
 
-        # print(f"Sending OpenAI API request... Using timeout: {timeout} seconds")
+        # print(f"Sending LLM API request... Using timeout: {timeout} seconds")
 
         # TODO!!! support for other LLM API-s
         # TODO!!! support for local LLM-s
@@ -109,7 +109,9 @@ def completion_with_backoff(
             else:
                 print("Response format error, giving up")
 
-        elif t is openai.RateLimitError:
+        elif (
+            t is openai.RateLimitError
+        ):  # TODO: detect when the credit limit is exceeded
             if attempt_number < max_attempt_number:
                 print("Rate limit error, retrying...")
             else:
@@ -132,11 +134,17 @@ def completion_with_backoff(
 
 
 def get_encoding_for_model(model):
-    try:
-        encoding = tiktoken.encoding_for_model(model)
-    except KeyError:
-        print("Warning: model not found. Using cl100k_base encoding.")
-        encoding = tiktoken.get_encoding("cl100k_base")
+    # TODO: gpt-4.5 encoding is still unknown
+    if model.startswith("gpt-4.1"):  # https://github.com/openai/tiktoken/issues/395
+        encoding = tiktoken.get_encoding(
+            "o200k_base"
+        )  # https://huggingface.co/datasets/openai/mrcr#how-to-run
+    else:
+        try:
+            encoding = tiktoken.encoding_for_model(model)
+        except KeyError:
+            print("Warning: model not found. Using cl100k_base encoding.")
+            encoding = tiktoken.get_encoding("cl100k_base")
 
     return encoding
 
@@ -148,91 +156,103 @@ def get_encoding_for_model(model):
 def num_tokens_from_messages(messages, model, encoding=None):
     """Return the number of tokens used by a list of messages."""
 
-    if encoding is None:
-        encoding = get_encoding_for_model(model)
+    is_local = model.startswith("local")
+    is_claude = model.startswith("claude-")
 
-    if model in {
-        "gpt-3.5-turbo-0125",
-        "gpt-3.5-turbo-0613",
-        "gpt-3.5-turbo-16k-0613",
-        "gpt-4-0314",
-        "gpt-4-0613",
-        "gpt-4-32k-0314",
-        "gpt-4-32k-0613",
-        "gpt-4o-mini-2024-07-18",
-        "gpt-4o-2024-08-06",
-    }:
-        tokens_per_message = 3
-        tokens_per_name = 1
+    if is_local:
+        return 0  # TODO
 
-    elif model == "gpt-3.5-turbo-0301":
-        tokens_per_message = (
-            4  # every message follows <|start|>{role/name}\n{content}<|end|>\n
-        )
-        tokens_per_name = -1  # if there's a name, the role is omitted
+    elif is_claude:
+        return 0  # TODO
 
-    elif "gpt-3.5-turbo-16k" in model:  # roland
-        # print("Warning: gpt-3.5-turbo-16k may update over time. Returning num tokens assuming gpt-3.5-turbo-16k-0613.")
-        return num_tokens_from_messages(
-            messages, model="gpt-3.5-turbo-16k-0613", encoding=encoding
-        )
+    else:  # OpenAI
+        if encoding is None:
+            encoding = get_encoding_for_model(model)
 
-    elif "gpt-3.5-turbo" in model:
-        # print("Warning: gpt-3.5-turbo may update over time. Returning num tokens assuming gpt-3.5-turbo-0613.")
-        return num_tokens_from_messages(
-            messages, model="gpt-3.5-turbo-0613", encoding=encoding
-        )
+        if model in {
+            "gpt-3.5-turbo-0125",
+            "gpt-3.5-turbo-0613",
+            "gpt-3.5-turbo-16k-0613",
+            "gpt-4-0314",
+            "gpt-4-0613",
+            "gpt-4-32k-0314",
+            "gpt-4-32k-0613",
+            "gpt-4o-mini-2024-07-18",
+            "gpt-4o-2024-08-06",
+        }:
+            tokens_per_message = 3
+            tokens_per_name = 1
 
-    elif "gpt-4-32k" in model:  # roland
-        # print("Warning: gpt-4 may update over time. Returning num tokens assuming gpt-4-32k-0613.")
-        return num_tokens_from_messages(
-            messages, model="gpt-4-32k-0613", encoding=encoding
-        )
+        elif model == "gpt-3.5-turbo-0301":
+            tokens_per_message = (
+                4  # every message follows <|start|>{role/name}\n{content}<|end|>\n
+            )
+            tokens_per_name = -1  # if there's a name, the role is omitted
 
-    elif "gpt-4o-mini" in model:
-        # print("Warning: gpt-4o-mini may update over time. Returning num tokens assuming gpt-4o-mini-2024-07-18.")
-        return num_tokens_from_messages(
-            messages, model="gpt-4o-mini-2024-07-18", encoding=encoding
-        )
+        elif "gpt-3.5-turbo-16k" in model:  # roland
+            # print("Warning: gpt-3.5-turbo-16k may update over time. Returning num tokens assuming gpt-3.5-turbo-16k-0613.")
+            return num_tokens_from_messages(
+                messages, model="gpt-3.5-turbo-16k-0613", encoding=encoding
+            )
 
-    elif "gpt-4o" in model:
-        # print("Warning: gpt-4o and gpt-4o-mini may update over time. Returning num tokens assuming gpt-4o-2024-08-06.")
-        return num_tokens_from_messages(
-            messages, model="gpt-4o-2024-08-06", encoding=encoding
-        )
+        elif "gpt-3.5-turbo" in model:
+            # print("Warning: gpt-3.5-turbo may update over time. Returning num tokens assuming gpt-3.5-turbo-0613.")
+            return num_tokens_from_messages(
+                messages, model="gpt-3.5-turbo-0613", encoding=encoding
+            )
 
-    elif "gpt-4" in model:
-        # print("Warning: gpt-4 may update over time. Returning num tokens assuming gpt-4-0613.")
-        return num_tokens_from_messages(messages, model="gpt-4-0613", encoding=encoding)
+        elif "gpt-4-32k" in model:  # roland
+            # print("Warning: gpt-4 may update over time. Returning num tokens assuming gpt-4-32k-0613.")
+            return num_tokens_from_messages(
+                messages, model="gpt-4-32k-0613", encoding=encoding
+            )
 
-    else:
-        # raise NotImplementedError(
-        #    f"""num_tokens_from_messages() is not implemented for model {model}. See https://github.com/openai/openai-python/blob/main/chatml.md for information on how messages are converted to tokens."""
-        # )
-        print(f"num_tokens_from_messages() is not implemented for model {model}")
-        # just take some conservative assumptions here
-        tokens_per_message = 4
-        tokens_per_name = 1
+        elif "gpt-4o-mini" in model:
+            # print("Warning: gpt-4o-mini may update over time. Returning num tokens assuming gpt-4o-mini-2024-07-18.")
+            return num_tokens_from_messages(
+                messages, model="gpt-4o-mini-2024-07-18", encoding=encoding
+            )
 
-    num_tokens = 0
-    for message in messages:
-        num_tokens += tokens_per_message
+        elif "gpt-4o" in model:
+            # print("Warning: gpt-4o and gpt-4o-mini may update over time. Returning num tokens assuming gpt-4o-2024-08-06.")
+            return num_tokens_from_messages(
+                messages, model="gpt-4o-2024-08-06", encoding=encoding
+            )
 
-        for key, value in message.items():
-            if key == "weight":
-                continue
+        elif "gpt-4" in model:
+            # print("Warning: gpt-4 may update over time. Returning num tokens assuming gpt-4-0613.")
+            return num_tokens_from_messages(
+                messages, model="gpt-4-0613", encoding=encoding
+            )
 
-            num_tokens += len(encoding.encode(value))
-            if key == "name":
-                num_tokens += tokens_per_name
+        else:
+            # raise NotImplementedError(
+            #    f"""num_tokens_from_messages() is not implemented for model {model}. See https://github.com/openai/openai-python/blob/main/chatml.md for information on how messages are converted to tokens."""
+            # )
+            print(f"num_tokens_from_messages() is not implemented for model {model}")
+            # just take some conservative assumptions here
+            tokens_per_message = 4
+            tokens_per_name = 1
 
-        # / for key, value in message.items():
+        num_tokens = 0
+        for message in messages:
+            num_tokens += tokens_per_message
 
-    # / for message in messages:
+            for key, value in message.items():
+                if key == "weight":
+                    continue
 
-    num_tokens += 3  # every reply is primed with <|start|>assistant<|message|>
+                num_tokens += len(encoding.encode(value))
+                if key == "name":
+                    num_tokens += tokens_per_name
 
-    return num_tokens
+            # / for key, value in message.items():
+
+        # / for message in messages:
+
+        num_tokens += 3  # every reply is primed with <|start|>assistant<|message|>
+
+        return num_tokens
 
 
 # / def num_tokens_from_messages(messages, model, encoding=None):
@@ -256,6 +276,20 @@ def get_max_tokens_for_model(model_name):
         model_name == "o1-preview-2024-09-12"
     ):  # https://platform.openai.com/docs/models/#o1
         max_tokens = 128000
+    elif (
+        model_name == "gpt-4.5-preview"
+    ):  # https://platform.openai.com/docs/models/gpt-4.5-preview
+        max_tokens = 128000
+    elif model_name == "gpt-4.1":  # https://platform.openai.com/docs/models/gpt-4.1
+        max_tokens = 1048576
+    elif (
+        model_name == "gpt-4.1-mini"
+    ):  # https://platform.openai.com/docs/models/gpt-4.1-mini
+        max_tokens = 1048576
+    elif (
+        model_name == "gpt-4.1-nano"
+    ):  # https://platform.openai.com/docs/models/gpt-4.1-nano
+        max_tokens = 1048576
     elif (
         model_name == "gpt-4o-mini"
     ):  # https://platform.openai.com/docs/models/gpt-4o-mini

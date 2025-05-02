@@ -389,7 +389,7 @@ class LLMAgent(Agent):
         )  # maximum temperature is 2 - https://platform.openai.com/docs/api-reference/chat/create
 
         # TODO: config
-        gpt_timeout = 60
+        gpt_timeout = 60  # TODO: if not model_name.lower().startswith("local") else 600
 
         while True:
             # TODO: implement local caching of prompt response pairs so that if same input is executed again then the response is taken from the local cache
