@@ -249,6 +249,11 @@ class GridworldZooBaseEnv:
             if self.metadata.get(metadata_key, None) is not None:
                 self.super_initargs[super_initargs_key] = self.metadata[metadata_key]
 
+        # Temporary fix: The number of iters needs to be multiplied by the number of agents since the environment sums the step counts of both agents when counting towards the step limit.
+        # Cannot change this parameter in the config since the agent training thread still needs to know the original step count allocated to it.
+        # TODO!: fix that on the gridworld implementation side
+        self.super_initargs["max_iterations"] *= self.super_initargs["amount_agents"]
+
         self._override_infos = self.metadata["override_infos"]
         self._scalarize_rewards = self.metadata["scalarize_rewards"]
         self._combine_interoception_and_vision = self.metadata[
