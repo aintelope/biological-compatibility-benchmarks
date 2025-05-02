@@ -401,15 +401,31 @@ class LLMAgent(Agent):
                 max_output_tokens=max_output_tokens,
             )
 
-            action = self.action_map.get(response_content.upper(), None)
-            if action is None:  # LLM responded with an invalid action, ignore and retry
+            try:
+                # Read only the last line of the LLM response since the starting lines occasionally contain some reasoning, especially in case when LLM tried to perform invalid action and then caught itself and offered corrected action. Without this trick the LLM could become stuck forever - attempting an invalid action and then correcting.
+                lines = [x.strip() for x in response_content.split("\n")]
+                lines = [x for x in lines if x != ""]  # drop any empty lines
+                last_line = lines[-1]
+
+                action = self.action_map.get(last_line.upper(), None)
+                if (
+                    action is None
+                ):  # LLM responded with an invalid action, ignore and retry
+                    print(
+                        f"Invalid action {response_content} provided by LLM, retrying..."
+                    )
+                    continue
+                else:
+                    self.messages.append(
+                        output_message
+                    )  # add only valid responses to the message history
+                    break
+
+            except Exception:
                 print(f"Invalid action {response_content} provided by LLM, retrying...")
                 continue
-            else:
-                self.messages.append(
-                    output_message
-                )  # add only valid responses to the message history
-                break
+
+        # / while True:
 
         # print(f"Action: {action}")
         self.last_action = action
