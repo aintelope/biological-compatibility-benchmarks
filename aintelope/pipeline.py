@@ -103,7 +103,6 @@ def run_pipeline(cfg: DictConfig) -> None:
         ),  # Linux does not unlock semaphore after a process gets killed, therefore disabling Semaphore under Linux until this gets resolved.
     ) as semaphore:
         print("Semaphore acquired...")
-
         # In case of 0 pipeline cycles (num_pipeline_cycles == 0), each environment has its own model. In this case run training and testing inside the same cycle immediately after each other.
         # In case of (num_pipeline_cycles > 0), train a SHARED model over all environments in the pipeline steps for num_pipeline_cycles. Then test that shared model for one additional cycle.
         # Therefore, the + 1 cycle is for testing. In case of (num_pipeline_cycles == 0), run testing inside the same cycle immediately after each environment's training ends.

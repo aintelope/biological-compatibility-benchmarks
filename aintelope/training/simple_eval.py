@@ -194,7 +194,7 @@ def run_episode(full_params: Dict) -> None:
                         observation=observation,
                         info=info,
                         step=step,
-                        trial=0,
+                        env_layout_seed=0,
                         episode=0,
                         pipeline_cycle=0,
                     )
@@ -239,7 +239,7 @@ def run_episode(full_params: Dict) -> None:
                             observation=observation,
                             info=info,
                             step=step,
-                            trial=0,
+                            env_layout_seed=0,
                             episode=0,
                             pipeline_cycle=0,
                         )
@@ -309,7 +309,7 @@ def run_episode(full_params: Dict) -> None:
                         observation=observation,
                         info=info,
                         step=step,
-                        trial=0,
+                        env_layout_seed=0,
                         episode=0,
                         pipeline_cycle=0,
                     )
@@ -356,7 +356,7 @@ def run_episode(full_params: Dict) -> None:
                             observation=observation,
                             info=info,
                             step=step,
-                            trial=0,
+                            env_layout_seed=0,
                             episode=0,
                             pipeline_cycle=0,
                         )

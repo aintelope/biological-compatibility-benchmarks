@@ -48,7 +48,11 @@ def boxplot() -> None:
     )
 
     agent_type_labels_mapping = OrderedDict(
-        {"random": "random", "score": "industry standard (dqn)"}
+        {
+            "random": "random",
+            "score": "industry standard (dqn)",
+            "handwritten_rules": "estimated optimum",
+        }
     )
     df["params_set_title"] = df["params_set_title"].map(agent_type_labels_mapping)
     hue_order = list(agent_type_labels_mapping.values())

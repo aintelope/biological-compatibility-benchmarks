@@ -43,16 +43,16 @@ hparams:
     eps_end: 0.0
     eps_last_pipeline_cycle: -1
     eps_last_episode: -1       # use -1 when episode counting for eps is disabled
-    eps_last_trial: -1  # 10       # use -1 when trials counting for eps is disabled
+    eps_last_env_layout_seed: -1  # 10       # use -1 when trials counting for eps is disabled
     eps_last_frame: ${hparams.env_params.num_iters}       # use -1 when iteration counting for eps is disabled
-  trial_length: -1 # 10
+  env_layout_seed_repeat_sequence_length: -1 # 10
   num_pipeline_cycles: 0
   num_episodes: 30 # how long to train. # TODO: move num_episodes to model_params
   test_episodes: 10 # will be added to train episodes
   env_params:
-    combine_interoception_and_vision: True  # needs to be set to True for OpenAI baselines learning algorithms
-    scalarize_rewards: False     # needs to be set to True for OpenAI baselines learning algorithms
-    num_iters: 400 # duration of a single episode. NB! warm_start_steps will be subtracted from this value
+    combine_interoception_and_vision: False  # needs to be set to True for OpenAI baselines learning algorithms
+    scalarize_rewards: False
+    num_iters: 400 # duration of a single episode
     env_experiment: ai_safety_gridworlds.aintelope_savanna
     level: 0
     map_max: 7     
@@ -63,9 +63,9 @@ hparams:
     # "max(map_width, map_height) - 3" in case of using Gridworld environments. This is because the map width and height includes walls. The agent always sees its own tile, so the actual radius will be one bigger. Therefore in total 3 units can be substracted.
     render_agent_radius: ${minus_3:${hparams.env_params.map_max}}
     #
-    # 0 - off (do not use this setting), 1 - once per experiment run, 2 - once per trial
-    # (a trial is a sequence of training episodes separated by env.reset call,
-    # but using a same model instance), 3 - once per training episode.
+    # Whether and when to randomize the map. 0 - off, 1 - once per experiment run, 
+    # 2 - once per env layout seed update (there is a sequence of training episodes 
+    # separated by env.reset call, but using a same model instance), 3 - once per training episode.
     map_randomization_frequency: 3 
     render_mode: null
     #

@@ -111,9 +111,9 @@ class GridworldZooBaseEnv:
         # 0 - fixed, 1 - relative, depending on last move, 2 - relative,
         # controlled by separate turning actions.
         "action_direction_mode": 1,
-        # 0 - off (do not use this setting), 1 - once per experiment run, 2 - once per trial
-        # (a trial is a sequence of training episodes separated by env.reset call,
-        # but using a same model instance), 3 - once per training episode.
+        # 'Whether and when to randomize the map. 0 - off, 1 - once per experiment run,
+        # 2 - once per env layout seed update (there is a sequence of training episodes
+        # separated by env.reset call, but using a same model instance), 3 - once per training episode.'
         "map_randomization_frequency": 1,
         # Whether to remove tile types not present on initial map from observation
         # layers. - set to False when same agent brain is trained over multiple
@@ -227,9 +227,9 @@ class GridworldZooBaseEnv:
             # 0 - fixed, 1 - relative, depending on last move, 2 - relative,
             # controlled by separate turning actions.
             "action_direction_mode": "action_direction_mode",
-            # 0 - off (do not use this setting), 1 - once per experiment run, 2 - once per trial (a trial is a
-            # sequence of training episodes separated by env.reset call,
-            # but using a same model instance), 3 - once per training episode.
+            # 'Whether and when to randomize the map. 0 - off, 1 - once per experiment run,
+            # 2 - once per env layout seed update (there is a sequence of training episodes
+            # separated by env.reset call, but using a same model instance), 3 - once per training episode.'
             "map_randomization_frequency": "map_randomization_frequency",
             # Whether to remove tile types not present on initial map from observation
             # layers. - set to False when same agent brain is trained over multiple
@@ -609,8 +609,8 @@ class SavannaGridworldParallelEnv(GridworldZooBaseEnv, GridworldZooParallelEnv):
         )
 
         print(
-            "trial_no: "
-            + str(GridworldZooParallelEnv.get_trial_no(self))
+            "env_layout_seed: "
+            + str(GridworldZooParallelEnv.get_env_layout_seed(self))
             + " episode_no: "
             + str(GridworldZooParallelEnv.get_episode_no(self))
         )
@@ -813,8 +813,8 @@ class SavannaGridworldSequentialEnv(GridworldZooBaseEnv, GridworldZooAecEnv):
         GridworldZooAecEnv.reset(self, seed=seed, options=options, *args, **kwargs)
 
         print(
-            "trial_no: "
-            + str(GridworldZooParallelEnv.get_trial_no(self))
+            "env_layout_seed: "
+            + str(GridworldZooParallelEnv.get_env_layout_seed(self))
             + " episode_no: "
             + str(GridworldZooParallelEnv.get_episode_no(self))
         )

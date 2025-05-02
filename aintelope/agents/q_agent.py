@@ -59,7 +59,7 @@ class QAgent(Agent):
         ] = None,
         info: dict = {},
         step: int = 0,
-        trial: int = 0,
+        env_layout_seed: int = 0,
         episode: int = 0,
         pipeline_cycle: int = 0,
     ) -> Optional[int]:
@@ -82,7 +82,13 @@ class QAgent(Agent):
             action = action_space.sample()
         else:
             q_values = self.trainer.get_action(
-                self.id, observation, self.info, step, trial, episode, pipeline_cycle
+                self.id,
+                observation,
+                self.info,
+                step,
+                env_layout_seed,
+                episode,
+                pipeline_cycle,
             )
 
             if isinstance(action_space, Discrete):

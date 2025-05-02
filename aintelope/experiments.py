@@ -36,6 +36,11 @@ def run_experiment(
     i_pipeline_cycle: int = 0,
     num_actual_train_episodes: int = -1,
 ) -> None:
+    if "trial_length" in cfg:  # backwards compatibility
+        cfg.env_layout_seed_repeat_sequence_length = cfg.trial_length
+    if "eps_last_env_layout_seed" in cfg:  # backwards compatibility
+        cfg.eps_last_env_layout_seed = cfg.eps_last_env_layout_seed
+
     logger = logging.getLogger("aintelope.experiment")
 
     is_sb3 = cfg.hparams.agent_class.startswith("sb3_")
@@ -63,7 +68,7 @@ def run_experiment(
         "Run_id",
         "Pipeline cycle",
         "Episode",
-        "Trial",
+        "Env layout seed",
         "Step",
         "IsTest",
         "Agent_id",
@@ -226,16 +231,16 @@ def run_experiment(
             for i_episode in r:
                 events.flush()
 
-                trial_no = (
+                env_layout_seed = (
                     int(
-                        i_episode / cfg.hparams.trial_length
-                    )  # TODO ensure different trial no during test when num_actual_train_episodes is not divisible by trial_length
-                    if cfg.hparams.trial_length > 0
-                    else i_episode  # this ensures that during test episodes, trial_no based map randomization seed is different from training seeds. The environment is re-constructed when testing starts. Without explicitly providing trial_no, the map randomization seed would be automatically reset to trial_no = 0, which would overlap with the training seeds.
+                        i_episode / cfg.hparams.env_layout_seed_repeat_sequence_length
+                    )  # TODO ensure different env_layout_seed during test when num_actual_train_episodes is not divisible by env_layout_seed_repeat_sequence_length
+                    if cfg.hparams.env_layout_seed_repeat_sequence_length > 0
+                    else i_episode  # this ensures that during test episodes, env_layout_seed based map randomization seed is different from training seeds. The environment is re-constructed when testing starts. Without explicitly providing env_layout_seed, the map randomization seed would be automatically reset to env_layout_seed = 0, which would overlap with the training seeds.
                 )
 
                 print(
-                    f"\ni_pipeline_cycle: {i_pipeline_cycle} experiment: {experiment_name} episode: {i_episode} trial_no: {trial_no} test_mode: {test_mode}"
+                    f"\ni_pipeline_cycle: {i_pipeline_cycle} experiment: {experiment_name} episode: {i_episode} env_layout_seed: {env_layout_seed} test_mode: {test_mode}"
                 )
 
                 # TODO: refactor these checks into separate function        # Save models
@@ -266,8 +271,8 @@ def run_experiment(
                         observations,
                         infos,
                     ) = env.reset(
-                        trial_no=trial_no
-                    )  # if not test_mode else -(trial_no - cfg.hparams.num_episodes + 1))
+                        env_layout_seed=env_layout_seed
+                    )  # if not test_mode else -(env_layout_seed - cfg.hparams.num_episodes + 1))
                     for agent in agents:
                         agent.reset(observations[agent.id], infos[agent.id], type(env))
                         # trainer.reset_agent(agent.id)	# TODO: configuration flag
@@ -275,8 +280,8 @@ def run_experiment(
 
                 elif isinstance(env, AECEnv):
                     env.reset(  # TODO: actually savanna_safetygrid wrapper provides observations and infos as a return value, so need for branching here
-                        trial_no=trial_no
-                    )  # if not test_mode else -(trial_no - cfg.hparams.num_episodes + 1))
+                        env_layout_seed=env_layout_seed
+                    )  # if not test_mode else -(env_layout_seed - cfg.hparams.num_episodes + 1))
                     for agent in agents:
                         agent.reset(
                             env.observe(agent.id), env.observe_info(agent.id), type(env)
@@ -304,7 +309,7 @@ def run_experiment(
                                     observation=observation,
                                     info=info,
                                     step=step,
-                                    trial=trial_no,
+                                    env_layout_seed=env_layout_seed,
                                     episode=i_episode,
                                     pipeline_cycle=i_pipeline_cycle,
                                 )
@@ -363,7 +368,7 @@ def run_experiment(
                                         cfg.experiment_name,
                                         i_pipeline_cycle,
                                         i_episode,
-                                        trial_no,
+                                        env_layout_seed,
                                         step,
                                         test_mode,
                                     ]
@@ -394,7 +399,7 @@ def run_experiment(
                                         observation=observation,
                                         info=info,
                                         step=step,
-                                        trial=trial_no,
+                                        env_layout_seed=env_layout_seed,
                                         episode=i_episode,
                                         pipeline_cycle=i_pipeline_cycle,
                                     )
@@ -453,7 +458,7 @@ def run_experiment(
                                             cfg.experiment_name,
                                             i_pipeline_cycle,
                                             i_episode,
-                                            trial_no,
+                                            env_layout_seed,
                                             step,
                                             test_mode,
                                         ]
@@ -548,7 +553,7 @@ def run_baseline_training(
     # NB! PPO doing extra episodes causes the episode index counting for test episodes to collide with train episodes, therefore need to offset the test episode numbers
     num_actual_train_episodes = agents[
         0
-    ].next_episode_no  # We assume that the last episode is not followed by a reset. Cannot use env.get_episode_no() here since its counter is reset for each new trial.
+    ].next_episode_no  # We assume that the last episode is not followed by a reset. Cannot use env.get_episode_no() here since its counter is reset for each new env_layout_seed.
     return num_actual_train_episodes
 
 

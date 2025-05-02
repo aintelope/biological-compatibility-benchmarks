@@ -236,17 +236,12 @@ class SB3BaseAgent(Agent):
         ] = None,
         info: dict = {},
         step: int = 0,
-        trial: int = 0,
+        env_layout_seed: int = 0,
         episode: int = 0,
         pipeline_cycle: int = 0,
     ) -> Optional[int]:
-        """Given an observation, ask your model what to do. State is needed to be
-        given here as other agents have changed the state!
-
-        Args:
-            net: pytorch Module instance, the model
-            epsilon: value to determine likelihood of taking a random action
-            device: current device
+        """Given an observation, ask your model what to do.
+        Called during test only, not during training.
 
         Returns:
             action (Optional[int]): index of action
@@ -283,18 +278,18 @@ class SB3BaseAgent(Agent):
 
         i_episode = (
             self.next_episode_no
-        )  # cannot use env.get_next_episode_no() here since its counter is reset for each new trial
+        )  # cannot use env.get_next_episode_no() here since its counter is reset for each new env_layout_seed
         self.next_episode_no += 1  # no need to worry about the first reset happening multiple times in experiments.py since the current callback is activated only before self.model.learn() is called
 
-        trial_no = (
+        env_layout_seed = (
             int(
-                i_episode / self.cfg.hparams.trial_length
-            )  # TODO ensure different trial no during test when num_actual_train_episodes is not divisible by trial_length
-            if self.cfg.hparams.trial_length > 0
-            else i_episode  # this ensures that during test episodes, trial_no based map randomization seed is different from training seeds. The environment is re-constructed when testing starts. Without explicitly providing trial_no, the map randomization seed would be automatically reset to trial_no = 0, which would overlap with the training seeds.
+                i_episode / self.cfg.hparams.env_layout_seed_repeat_sequence_length
+            )  # TODO ensure different env_layout_seed during test when num_actual_train_episodes is not divisible by env_layout_seed_repeat_sequence_length
+            if self.cfg.hparams.env_layout_seed_repeat_sequence_length > 0
+            else i_episode  # this ensures that during test episodes, env_layout_seed based map randomization seed is different from training seeds. The environment is re-constructed when testing starts. Without explicitly providing env_layout_seed, the map randomization seed would be automatically reset to env_layout_seed = 0, which would overlap with the training seeds.
         )
 
-        kwargs["trial_no"] = trial_no
+        kwargs["env_layout_seed"] = env_layout_seed
 
         return (True, seed, options, args, kwargs)  # allow reset
 
@@ -329,10 +324,10 @@ class SB3BaseAgent(Agent):
         i_pipeline_cycle = self.i_pipeline_cycle
         i_episode = (
             self.next_episode_no - 1
-        )  # cannot use env.get_next_episode_no() here since its counter is reset for each new trial
-        trial_no = (
-            self.env.get_trial_no()
-        )  # no need to substract 1 here since trial_no value is overridden in env_pre_reset_callback
+        )  # cannot use env.get_next_episode_no() here since its counter is reset for each new env_layout_seed
+        env_layout_seed = (
+            self.env.get_env_layout_seed()
+        )  # no need to substract 1 here since env_layout_seed value is overridden in env_pre_reset_callback
         step = (
             self.env.get_step_no() - 1
         )  # get_step_no() returned step indexes start with 1
@@ -373,7 +368,7 @@ class SB3BaseAgent(Agent):
                     self.cfg.experiment_name,
                     i_pipeline_cycle,
                     i_episode,
-                    trial_no,
+                    env_layout_seed,
                     step,
                     test_mode,
                 ]
@@ -437,10 +432,10 @@ class SB3BaseAgent(Agent):
         i_pipeline_cycle = self.i_pipeline_cycle
         i_episode = (
             self.next_episode_no - 1
-        )  # cannot use env.get_next_episode_no() here since its counter is reset for each new trial
-        trial_no = (
-            self.env.get_trial_no()
-        )  # no need to substract 1 here since trial_no value is overridden in env_pre_reset_callback
+        )  # cannot use env.get_next_episode_no() here since its counter is reset for each new env_layout_seed
+        env_layout_seed = (
+            self.env.get_env_layout_seed()
+        )  # no need to substract 1 here since env_layout_seed value is overridden in env_pre_reset_callback
         step = (
             self.env.get_step_no() - 1
         )  # get_step_no() returned step indexes start with 1
@@ -451,7 +446,7 @@ class SB3BaseAgent(Agent):
                 self.cfg.experiment_name,
                 i_pipeline_cycle,
                 i_episode,
-                trial_no,
+                env_layout_seed,
                 step,
                 test_mode,
             ]

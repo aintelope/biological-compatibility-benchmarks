@@ -27,7 +27,7 @@ class Agent(ABC):
         ] = None,
         info: dict = {},
         step: int = 0,
-        trial: int = 0,
+        env_layout_seed: int = 0,
         episode: int = 0,
         pipeline_cycle: int = 0,
     ) -> Optional[int]:

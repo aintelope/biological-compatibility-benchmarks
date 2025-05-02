@@ -241,7 +241,7 @@ async def run_gridsearch_experiment_multiprocess(
 
     # enable this the commented out lines of code below if you want to remove a some sets from the cache and recompute it
     # delete_param_sets = [
-    #    {'hparams': {'gridsearch_trial_no': 0, 'params_set_title': 'mixed', 'batch_size': 16, 'lr': 0.015, 'amsgrad': True, 'use_separate_models_for_each_experiment': True, 'model_params': {'hidden_sizes': [8, 16, 8], 'num_conv_layers': 2, 'conv_size': 2, 'gamma': 0.9, 'tau': 0.05, 'eps_start': 0.66, 'eps_end': 0.0, 'replay_size': 99, 'eps_last_pipeline_cycle': 1, 'eps_last_episode': 30, 'eps_last_trial': -1, 'eps_last_frame': 400}, 'trial_length': -1, 'num_pipeline_cycles': 0, 'num_episodes': 30, 'test_episodes': 10, 'env_params': {'num_iters': 400, 'map_max': 7, 'map_width': 7, 'map_height': 7, 'render_agent_radius': 4}}},
+    #    {'hparams': {'gridsearch_trial_no': 0, 'params_set_title': 'mixed', 'batch_size': 16, 'lr': 0.015, 'amsgrad': True, 'use_separate_models_for_each_experiment': True, 'model_params': {'hidden_sizes': [8, 16, 8], 'num_conv_layers': 2, 'conv_size': 2, 'gamma': 0.9, 'tau': 0.05, 'eps_start': 0.66, 'eps_end': 0.0, 'replay_size': 99, 'eps_last_pipeline_cycle': 1, 'eps_last_episode': 30, 'eps_last_env_layout_seed': -1, 'eps_last_frame': 400}, 'env_layout_seed_repeat_sequence_length': -1, 'num_pipeline_cycles': 0, 'num_episodes': 30, 'test_episodes': 10, 'env_params': {'num_iters': 400, 'map_max': 7, 'map_width': 7, 'map_height': 7, 'render_agent_radius': 4}}},
     # ]
 
     # gridsearch_params_dict = OmegaConf.to_container(gridsearch_params, resolve=True)
