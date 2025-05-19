@@ -5,16 +5,9 @@
 # Repository: https://github.com/aintelope/biological-compatibility-benchmarks
 
 hparams:
-  gridsearch_trial_no: ${range:0,20}        # used just to repeat same experiment multiple times
-  params_set_title: "score_a2c"
+  gridsearch_trial_no: ${range:0,100}        # used just to repeat same experiment multiple times
   use_separate_models_for_each_experiment: True
-  model_params:
-    eps_start: 0.0
-    eps_end: 0.0
-    eps_last_pipeline_cycle: 1      # could be -1 but current cache has 1 so let it be
-    eps_last_episode: ${hparams.num_episodes}       # use -1 when episode counting for eps is disabled
-    eps_last_env_layout_seed: -1  # 10       # use -1 when trials counting for eps is disabled
-    eps_last_frame: ${hparams.env_params.num_iters}       # use -1 when iteration counting for eps is disabled
+  model_params: {}
   env_layout_seed_repeat_sequence_length: -1 # 10
   num_pipeline_cycles: 0
   num_episodes: null # [30, 40]    # 0  # how long to train. # TODO: move num_episodes to model_params
