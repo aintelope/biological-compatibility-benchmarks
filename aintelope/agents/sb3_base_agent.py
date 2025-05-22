@@ -4,6 +4,7 @@
 #
 # Repository: https://github.com/aintelope/biological-compatibility-benchmarks
 
+import os
 import logging
 import traceback
 from typing import List, NamedTuple, Optional, Tuple
@@ -35,8 +36,7 @@ from zoo_to_gym_multiagent_adapter.multiagent_zoo_to_gym_adapter import (
 )
 
 import stable_baselines3
-from stable_baselines3 import PPO
-import supersuit as ss
+from stable_baselines3.common.callbacks import CheckpointCallback
 
 import torch
 import torch.nn as nn
@@ -157,11 +157,27 @@ def sb3_agent_train_thread_entry_point(
         pipe, agent_id, checkpoint_filename, observation_space, action_space
     )
     try:
-        model = model_constructor(env_wrapper, cfg)
-        model.learn(total_timesteps=num_total_steps)
         filename_timestamp_sufix_str = datetime.datetime.now().strftime(
             "%Y_%m_%d_%H_%M_%S_%f"
         )
+        filename_with_timestamp = (
+            checkpoint_filename + "-" + filename_timestamp_sufix_str
+        )
+
+        # resulting filename looks like checkpointfilename_timestamp_200000_steps.zip next checkpointfilename_timestamp_400000_steps.zip etc
+        # note that steps count in the checkpoint filename is multiplied by the number of agents in multi-agent scenarios
+        checkpoint_callback = (
+            CheckpointCallback(
+                save_freq=cfg.hparams.save_frequency,  # save frequency in timesteps
+                save_path=os.path.dirname(filename_with_timestamp),
+                name_prefix=os.path.basename(filename_with_timestamp),
+            )
+            if cfg.hparams.save_frequency > 0
+            else None
+        )
+
+        model = model_constructor(env_wrapper, cfg)
+        model.learn(total_timesteps=num_total_steps, callback=checkpoint_callback)
         env_wrapper.save_or_return_model(model, filename_timestamp_sufix_str)
     except (
         Exception
@@ -508,7 +524,23 @@ class SB3BaseAgent(Agent):
             self.env._post_step_callback2 = self.sequential_env_post_step_callback
 
         if self.model is not None:  # single-model scenario
-            self.model.learn(total_timesteps=num_total_steps)
+            checkpoint_filenames = self.get_checkpoint_filenames(include_timestamp=True)
+            filename_with_timestamp = checkpoint_filenames[self.id]
+
+            # resulting filename looks like checkpointfilename_timestamp_100000_steps.zip next checkpointfilename_timestamp_200000_steps.zip etc
+            checkpoint_callback = (
+                CheckpointCallback(
+                    save_freq=self.cfg.hparams.save_frequency,  # save frequency in timesteps
+                    save_path=os.path.dirname(filename_with_timestamp),
+                    name_prefix=os.path.basename(filename_with_timestamp),
+                )
+                if self.cfg.hparams.save_frequency > 0
+                else None
+            )
+
+            self.model.learn(
+                total_timesteps=num_total_steps, callback=checkpoint_callback
+            )
         else:
             checkpoint_filenames = self.get_checkpoint_filenames(
                 include_timestamp=False
