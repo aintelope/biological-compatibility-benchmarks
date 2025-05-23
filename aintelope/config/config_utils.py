@@ -89,6 +89,15 @@ def minus_3(entry):
         return entry - 3
 
 
+def muldiv(entry, multiplier, divisor):
+    if entry is None:
+        return None
+    elif hasattr(entry, "__iter__"):  # isinstance(entry, list) does not work here
+        return [int(x * multiplier / divisor) for x in entry]
+    else:
+        return int(entry * multiplier / divisor)
+
+
 def register_resolvers() -> None:
     OmegaConf.register_new_resolver("custom_now", custom_now)
     OmegaConf.register_new_resolver("abs_path", get_project_path)
@@ -96,6 +105,7 @@ def register_resolvers() -> None:
         "append_pid_and_uuid", append_pid_and_uuid, use_cache=True
     )  # NB! need to enable caching else the pid_and_uuid will change at random moments during execution, leading to errors
     OmegaConf.register_new_resolver("minus_3", minus_3)
+    OmegaConf.register_new_resolver("muldiv", muldiv)
     OmegaConf.register_new_resolver("range", create_range)
 
 
