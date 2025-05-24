@@ -7,7 +7,8 @@
 hparams:
   gridsearch_trial_no: ${range:0,100}        # used just to repeat same experiment multiple times
   use_separate_models_for_each_experiment: True
-  model_params: {}
+  model_params:
+    num_conv_layers: [0, 2, 3]
   env_layout_seed_repeat_sequence_length: -1 # 10
   num_pipeline_cycles: 0
   num_episodes: null # [30, 40]    # 0  # how long to train. # TODO: move num_episodes to model_params

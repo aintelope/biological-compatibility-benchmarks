@@ -104,7 +104,7 @@ async def run_gridsearch_experiments_async() -> None:
         "hparams.gridsearch_trial_no"
     ] = (
         initial_config_gridsearch.hparams.gridsearch_trial_no
-    )  # this is a OmegaConf resolver that generates a list
+    )  # this is a OmegaConf resolver that generates a list. Additionally, gridsearch_trial_no iterator is always last dimension to be iterated over.
 
     # create outer product of all list entries stored in the dictionary values
     # http://stephantul.github.io/python/2019/07/20/product-dict/
