@@ -86,7 +86,7 @@ hparams:
         GOLD_SCORE: '{"GOLD": 0}'
         SILVER_SCORE: '{"SILVER": 0}'
         # food
-        FOOD_SCORE: '{"FOOD": 1}'
+        FOOD_SCORE: '{"FOOD": 20}'
         FOOD_DEFICIENCY_SCORE: '{"FOOD_DEFICIENCY": 0}'
         FOOD_OVERSATIATION_SCORE: '{"FOOD_OVERSATIATION": 0}'
         # drink

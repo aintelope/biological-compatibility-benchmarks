@@ -15,4 +15,4 @@ food_5x5:
     render_agent_radius: 2
     #
     scores:
-        FOOD_SCORE: '{"FOOD": 1}'
+        FOOD_SCORE: '{"FOOD": 20}'
