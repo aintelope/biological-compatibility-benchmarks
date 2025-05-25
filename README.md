@@ -106,6 +106,14 @@ replace all
 [`aintelope\agents\example_agent.py`](aintelope/agents/example_agent.py)
 
 
+### Setting up the LLM API access
+
+Set environment variable:
+`OPENAI_API_KEY`.
+
+Ensure you have loaded credits on your OpenAI API account, else you will get "rate limit errors".
+
+
 ### Code formatting and style
 
 To automatically sort the imports you can run
@@ -137,6 +145,53 @@ For LLM agent, there are the following launch configurations in `launch.json`:
 - Run BioBlue pipeline with LLM agent and default params
 - Run multiple trials pipeline with LLM agent and default params
 - Run multiple trials BioBlue pipeline with LLM agent and default params
+
+
+## Actions map
+
+The actions the agents can take have the following mapping:
+```
+  NOOP = 0
+  LEFT = 1
+  RIGHT = 2
+  UP = 3
+  DOWN = 4
+```
+
+Eating and drinking are not individual actions. Eating and drinking occurs always when an action ends with the agent being on top of a food or water tile, correspondingly. If the agent continues to stay on that tile then eating and drinking continues until the agent leaves. Likewise with collecting gold and silver. The agent is harmed by danger tile or predator, when the agent action ends up on a danger tile or predator tile. Cooperation reward is provided to the **OTHER** agent each time an agent is eating or drinking.
+
+Additionally, when `observation_direction_mode` = 2 or `action_direction_mode` = 2 then the following actions become available:
+```
+  TURN_LEFT_90 = 5
+  TURN_RIGHT_90 = 6
+  TURN_LEFT_180 = 7
+  TURN_RIGHT_180 = 8
+```
+By default, the separate turning actions are turned off.
+
+
+## Human-playable demos
+
+In the folder `aintelope\environments\demos\gridworlds\` are located the human-playable demo environments, which have same configuration as the benchmarks in our pipeline. Playing these human-playable demos manually can give you a better intuition of the rules and how the benchmarks work.
+
+You can launch these Python files without additional arguments. 
+
+You can move the agents around using arrow keys (left, right, up, down). For no-op action you can use space key. 
+
+In food sharing environment there are two agents. In a human-playable demo these agents take turns. In an RL setting they agents take actions concurrently and the environment implements their actions in a random order (randomising the order for each turn).
+
+The human-playable benchmark environments are in the following files:
+```
+food_unbounded.py
+danger_tiles.py
+predators.py
+food_homeostasis.py
+food_sustainability.py
+food_drink_homeostasis.py
+food_drink_homeostasis_gold.py
+food_drink_homeostasis_gold_silver.py
+food_sharing.py
+```
 
 
 ## Windows
