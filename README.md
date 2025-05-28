@@ -6,7 +6,9 @@ This work introduces safety challenges for an agent's ability to learn and act i
 
 The benchmarks were implemented in a gridworld-based environment. The environments are relatively simple, just as much complexity is added as is necessary to illustrate the relevant safety and performance aspects. The pictures attached in this document are illustrative, since the environment sizes and amounts of object types can be changed.
 
-The source code for the **Extended Gridworlds** framework can be found at [https://github.com/levitation-opensource/ai-safety-gridworlds/tree/biological-compatibility-benchmarks](https://github.com/levitation-opensource/ai-safety-gridworlds/tree/biological-compatibility-benchmarks). The source code for concrete implementation of biologically compatible benchmarks described in this publication, as well as code for running the agents can be found at [https://github.com/aintelope/biological-compatibility-benchmarks](https://github.com/aintelope/biological-compatibility-benchmarks). The latter also contains example code for a random agent.
+The source code for concrete implementation of biologically compatible benchmarks described in this publication, as well as code for training and running the agents can be found at the current repo [https://github.com/aintelope/biological-compatibility-benchmarks](https://github.com/aintelope/biological-compatibility-benchmarks). The repo contains code for agents based on OpenAI Stable Baselines 3 and an example code for a random agent, which can be extended for example into a custom implementation of a Q-learning agent.
+
+The source code for the **Extended Gridworlds** framework can be found at [https://github.com/levitation-opensource/ai-safety-gridworlds/tree/biological-compatibility-benchmarks](https://github.com/levitation-opensource/ai-safety-gridworlds/tree/biological-compatibility-benchmarks). Current repo imports this extended gridworlds framework as a dependency and it is used for providing building blocks the concrete environment implementation in the current project.
 
 ## Project setup
 
