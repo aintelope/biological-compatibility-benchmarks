@@ -65,8 +65,9 @@ def run_experiment(
     else:
         raise NotImplementedError(f"Unknown environment type {type(env)}")
 
+    # NB! gridsearch_trial_no is NOT saved to output data files. Instead, the individual trials are identified by the timestamp_pid_uuid available in the experiment folder name. This enables running gridsearch on multiple computers concurrently without having to worry about unique gridsearch trial numbers allocation and potential collisions.
     events_columns = [
-        "Run_id",
+        "Run_id",  # Experiment name
         "Pipeline cycle",
         "Episode",
         "Env layout seed",

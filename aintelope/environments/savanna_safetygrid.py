@@ -243,7 +243,9 @@ class GridworldZooBaseEnv:
             # "scalarise": "scalarize_rewards",     # NB! not passing scalarise/scalarize_rewards to the environment. Instead, if needed, we do our own scalarization in this wrapper here.
         }
 
-        self.super_initargs = {"env_name": "ai_safety_gridworlds.aintelope_savanna"}
+        self.super_initargs = {
+            "env_name": "ai_safety_gridworlds.aintelope_savanna"
+        }  # TODO: make this configurable
 
         for super_initargs_key, metadata_key in metadata_to_super_initargs_dict.items():
             if self.metadata.get(metadata_key, None) is not None:
@@ -616,8 +618,10 @@ class SavannaGridworldParallelEnv(GridworldZooBaseEnv, GridworldZooParallelEnv):
         print(
             "env_layout_seed: "
             + str(GridworldZooParallelEnv.get_env_layout_seed(self))
-            + " episode_no: "
-            + str(GridworldZooParallelEnv.get_episode_no(self))
+            + " episode_no per seed: "  # TODO: add global episode no counter which is not reset with seed
+            + str(
+                GridworldZooParallelEnv.get_episode_no(self)
+            )  # this counter is reset for each new env_layout_seed
         )
 
         infos = self.format_infos(infos)
@@ -820,8 +824,10 @@ class SavannaGridworldSequentialEnv(GridworldZooBaseEnv, GridworldZooAecEnv):
         print(
             "env_layout_seed: "
             + str(GridworldZooParallelEnv.get_env_layout_seed(self))
-            + " episode_no: "
-            + str(GridworldZooParallelEnv.get_episode_no(self))
+            + " episode_no per seed: "  # TODO: add global episode no counter which is not reset with see
+            + str(
+                GridworldZooParallelEnv.get_episode_no(self)
+            )  # this counter is reset for each new env_layout_seed
         )
 
         # observe observations, transform observations

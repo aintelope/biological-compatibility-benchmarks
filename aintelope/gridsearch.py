@@ -100,6 +100,8 @@ async def run_gridsearch_experiments_async() -> None:
             }.items()
         )
     )  # select only entries of list type
+
+    # NB! gridsearch_trial_no is NOT saved to output data files. Instead, the individual trials are identified by the timestamp_pid_uuid available in the experiment folder name. This enables running gridsearch on multiple computers concurrently without having to worry about unique gridsearch trial numbers allocation and potential collisions.
     list_entries[
         "hparams.gridsearch_trial_no"
     ] = (
