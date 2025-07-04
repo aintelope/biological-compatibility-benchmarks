@@ -6,7 +6,9 @@ This work introduces safety challenges for an agent's ability to learn and act i
 
 The benchmarks were implemented in a gridworld-based environment. The environments are relatively simple, just as much complexity is added as is necessary to illustrate the relevant safety and performance aspects. The pictures attached in this document are illustrative, since the environment sizes and amounts of object types can be changed.
 
-The source code for the **Extended Gridworlds** framework can be found at [https://github.com/levitation-opensource/ai-safety-gridworlds/tree/biological-compatibility-benchmarks](https://github.com/levitation-opensource/ai-safety-gridworlds/tree/biological-compatibility-benchmarks). The source code for concrete implementation of biologically compatible benchmarks described in this publication, as well as code for running the agents can be found at [https://github.com/aintelope/biological-compatibility-benchmarks](https://github.com/aintelope/biological-compatibility-benchmarks). The latter also contains example code for a random agent.
+The source code for concrete implementation of biologically compatible benchmarks described in this publication, as well as code for training and running the agents can be found at the current repo [https://github.com/aintelope/biological-compatibility-benchmarks](https://github.com/aintelope/biological-compatibility-benchmarks). The repo contains code for agents based on OpenAI Stable Baselines 3 and an example code for a random agent, which can be extended for example into a custom implementation of a Q-learning agent.
+
+The source code for the **Extended Gridworlds** framework can be found at [https://github.com/levitation-opensource/ai-safety-gridworlds/tree/biological-compatibility-benchmarks](https://github.com/levitation-opensource/ai-safety-gridworlds/tree/biological-compatibility-benchmarks). Current repo imports this extended gridworlds framework as a dependency and it is used for providing building blocks the concrete environment implementation in the current project.
 
 ## Project setup
 
@@ -202,7 +204,8 @@ Aintelope code base is compatible with Windows. No extra steps needed. GPU compu
 # Papers
 
 * A working paper related to this repo: Pihlakas, R & Pyykkö, J. **"From homeostasis to resource sharing: Biologically and economically compatible multi-objective multi-agent AI safety benchmarks"**. Arxiv (2024-2025). https://arxiv.org/abs/2410.00081 
-<br>Data files of the experiments performed for this paper will be available here: https://drive.google.com/drive/folders/1KBRcPLbM2a8Li3HQ92lGTEfizOGtZ7OM?usp=sharing These data files contain logs of the steps agents took across training and test episodes, and multi-objective environment scores calculated during each step.
+<br>Data files of the experiments performed for the current version of working paper are available here: https://drive.google.com/drive/folders/1KBRcPLbM2a8Li3HQ92lGTEfizOGtZ7OM?usp=sharing These data files contain logs of the steps agents took across training and test episodes, and multi-objective environment scores calculated during each step. Each RL training run is 100k steps. There is one trial per benchmark-networkconfiguration-model combination.
+* **New data files for an updated version of the paper are currently being generated here:** https://aintelope.simplify.ee/ These new experiments have longer RL training runs (1M steps) and more trials per benchmark-networkconfiguration-model combination (100 trials each).
 
 
 # Blog posts
