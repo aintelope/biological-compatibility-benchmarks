@@ -41,7 +41,7 @@ hparams:
   env_layout_seed_repeat_sequence_length: -1 # 10
   num_pipeline_cycles: 0
   num_episodes: 0 # how long to train. # TODO: move num_episodes to model_params
-  test_episodes: 100 # will be added to train episodes
+  test_episodes: 1 # will be added to train episodes
   env_params:
     combine_interoception_and_vision: False  # needs to be set to True for OpenAI baselines learning algorithms
     scalarize_rewards: False

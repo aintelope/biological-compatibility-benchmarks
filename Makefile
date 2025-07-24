@@ -8,7 +8,7 @@ run-training-baseline: ## run baseline experiment
 	python -m ${PROJECT} hparams.agent_id=example_agent
 
 run-pipeline: ## run pipeline
-	python -m ${PROJECT}
+	python -m ${PROJECT} hparams.agent_id=example_agent
 
 # ---------- installation and environment ----------
 .PHONY: venv clean-venv install install-dev install-all build-local

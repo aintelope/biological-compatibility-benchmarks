@@ -336,7 +336,7 @@ class LLMAgent(Agent):
 
         self.messages.append({"role": "user", "content": prompt})
 
-        max_output_tokens = 100  # TODO: config
+        max_output_tokens = 200  # TODO: config
 
         num_tokens = num_tokens_from_messages(self.messages, self.model_name)
 
