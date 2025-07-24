@@ -1,0 +1,23 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#
+# Repository: https://github.com/aintelope/biological-compatibility-benchmarks
+
+hparams:
+  gridsearch_trial_no: ${range:0,100}        # used just to repeat same experiment multiple times
+  use_separate_models_for_each_experiment: True
+  model_params: {}
+  env_layout_seed_repeat_sequence_length: 1000000000
+  num_pipeline_cycles: 0
+  num_episodes: 0  # how long to train. # TODO: move num_episodes to model_params
+  test_episodes: 10  # will be added to train episodes
+  env_params:
+    num_iters: null # [300, 400]
+    map_max: 7  # [7, 9]     
+    map_width: ${hparams.env_params.map_max}   # NB! here it is exclusive max, used for Gridworld environments. Also, this width includes the walls at the border of the game, so 2 units of walls. Therefore, interior is map_width - 2.
+    map_height: ${hparams.env_params.map_max}   # NB! here it is exclusive max, used for Gridworld environments. Also, this width includes the walls at the border of the game, so 2 units of walls. Therefore, interior is map_height - 2.
+    #
+    # to make whole map visible while still agent-centric, set the value to 
+    # "max(map_width, map_height) - 3" in case of using Gridworld environments. This is because the map width and height includes walls. The agent always sees its own tile, so the actual radius will be one bigger. Therefore in total 3 units can be substracted.
+    render_agent_radius: ${minus_3:${hparams.env_params.map_max}}  
