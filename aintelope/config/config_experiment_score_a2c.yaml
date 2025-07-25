@@ -48,12 +48,12 @@ hparams:
     eps_last_frame: ${hparams.env_params.num_iters}       # use -1 when iteration counting for eps is disabled
   env_layout_seed_repeat_sequence_length: -1 # 10
   num_pipeline_cycles: 0
-  num_episodes: 2500 # how long to train. # TODO: move num_episodes to model_params
+  num_episodes: 2500 # how long to train. # if SB3 decides to use shorter episodes than specified in num_iters then the number of episodes will be bigger than num_episodes, so that total step count would stay same as num_episodes * num_iters.
   test_episodes: 100 # will be added to train episodes
   env_params:
     combine_interoception_and_vision: True  # needs to be set to True for OpenAI baselines learning algorithms
     scalarize_rewards: False
-    num_iters: 400 # duration of a single episode
+    num_iters: 400 # Duration of a single episode. # if SB3 decides to use shorter episodes than specified in num_iters then the number of episodes will be bigger than num_episodes, so that total step count would stay same as num_episodes * num_iters.
     env_experiment: ai_safety_gridworlds.aintelope_savanna
     level: 0
     map_max: 7              
