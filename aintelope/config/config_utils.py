@@ -12,7 +12,7 @@ import os
 import sys
 import uuid
 import time
-import torch
+# import torch  # comment-out: optimisation: load torch lazyly only when needed. This speeds up analytics, for example.
 
 from omegaconf import DictConfig, OmegaConf
 
@@ -253,6 +253,8 @@ def rotate_active_gpu_selection():
     where 3,4 are the device numbers you want to enable for the program to choose from.
     The device numbers start from 0.
     """
+
+    import torch    # Optimisation: load torch lazyly only when needed. This speeds up analytics, for example.
 
     gpu_count = torch.cuda.device_count()
     if gpu_count == 0:
