@@ -75,7 +75,11 @@ class CustomCNN(BaseFeaturesExtractor):
 
         # TODO: make this architecture configurable
 
-        # Current observation_space is (15, 9, 9) - channels=15, height=9, width=9
+        num_channels = observation_space.shape[0]
+        height = observation_space.shape[1]
+        width = observation_space.shape[2]
+
+        # Current observation_space is (num_channels, 9, 9) - channels=num_channels, height=9, width=9
         # Let's build a small CNN with two conv layers:
         #   Conv1: kernel_size=3, stride=1, padding=1 - keeps spatial dims at 9x9 -> 9x9
         #   Conv2: kernel_size=3, stride=2, padding=1 - downsamples from 9x9 -> 5x5
@@ -86,7 +90,7 @@ class CustomCNN(BaseFeaturesExtractor):
 
         if num_conv_layers == 2:
             self.cnn = nn.Sequential(
-                nn.Conv2d(15, 32, kernel_size=3, stride=1, padding=1),
+                nn.Conv2d(num_channels, 32, kernel_size=3, stride=1, padding=1),
                 nn.ReLU(),
                 nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1),
                 nn.ReLU(),
@@ -94,7 +98,7 @@ class CustomCNN(BaseFeaturesExtractor):
             )
         elif num_conv_layers == 3:
             self.cnn = nn.Sequential(
-                nn.Conv2d(15, 32, kernel_size=3, stride=1, padding=1),
+                nn.Conv2d(num_channels, 32, kernel_size=3, stride=1, padding=1),
                 nn.ReLU(),
                 nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1),
                 nn.ReLU(),
@@ -111,13 +115,13 @@ class CustomCNN(BaseFeaturesExtractor):
         # * Residual connections: In case of a deeper network, sometimes adding skip connections (resnets) helps performance, though it's more advanced.
 
         # Figure out the output shape of self.cnn:
-        # 1) With the above, input: (batch_size, 15, 9, 9)
+        # 1) With the above, input: (batch_size, num_channels, 9, 9)
         # 2) After Conv1: (batch_size, 32, 9, 9)
         # 3) After Conv2: (batch_size, 64, 5, 5) => 64*5*5=1600
         # 4) After Conv3: (batch_size, 128, 3, 3) => 128*3*3=1152
         # We feed that into a linear layer to get features_dim=256
         with torch.no_grad():
-            sample_input = torch.zeros(1, 15, 9, 9)
+            sample_input = torch.zeros(1, num_channels, height, width)
             n_flatten = self.cnn(sample_input).shape[1]
 
         self.linear = nn.Sequential(
