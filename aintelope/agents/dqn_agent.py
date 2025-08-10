@@ -60,7 +60,7 @@ def dqn_model_constructor(env, cfg):
                 "normalize_images": False,
                 "features_extractor_class": CustomCNN,  # need custom CNN in order to handle observation shape 9x9
                 "features_extractor_kwargs": {
-                    "features_dim": 256,  # TODO: config parameter. Note this is not related to the number of features in the original observation (15), this parameter here is model's internal feature dimensionality
+                    "features_dim": 256,  # TODO: config parameter. Note this is not related to the number of features in the original observation (15 or 39), this parameter here is model's internal feature dimensionality
                     "num_conv_layers": cfg.hparams.model_params.num_conv_layers,
                 },
             }
@@ -71,6 +71,11 @@ def dqn_model_constructor(env, cfg):
             "cuda" if torch.cuda.is_available() else "cpu"
         ),  # Note, CUDA-based CPU performance is much better than Torch-CPU mode.
         tensorboard_log=cfg.tensorboard_dir,
+        optimize_memory_usage=True,
+        replay_buffer_kwargs={
+            "handle_timeout_termination": False
+        },  # handle_timeout_termination has to be False if optimize_memory_usage = True. Because test episodes have same length as training episodes, we can correctly disable timeout termination handling here.
+        # TODO: add a remaining-time feature to the input, using TimeFeatureWrapper from sb3_contrib
     )
 
 
