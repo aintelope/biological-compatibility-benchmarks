@@ -12,6 +12,7 @@ import os
 import sys
 import uuid
 import time
+
 # import torch  # comment-out: optimisation: load torch lazyly only when needed. This speeds up analytics, for example.
 
 from omegaconf import DictConfig, OmegaConf
@@ -214,6 +215,8 @@ def select_gpu(gpu_index=None):
     # TODO: run some threads on CPU if the available GPU-s do not support the required amount of threads
 
     if gpu_index is not None:
+        import torch  # Optimisation: load torch lazyly only when needed. This speeds up analytics, for example.
+
         gpu_count = torch.cuda.device_count()
         if gpu_count == 0:
             print(
@@ -254,7 +257,7 @@ def rotate_active_gpu_selection():
     The device numbers start from 0.
     """
 
-    import torch    # Optimisation: load torch lazyly only when needed. This speeds up analytics, for example.
+    import torch  # Optimisation: load torch lazyly only when needed. This speeds up analytics, for example.
 
     gpu_count = torch.cuda.device_count()
     if gpu_count == 0:
