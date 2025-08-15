@@ -47,6 +47,7 @@ hparams:
     eps_last_env_layout_seed: -1  # 10       # use -1 when trials counting for eps is disabled
     eps_last_frame: ${hparams.env_params.num_iters}       # use -1 when iteration counting for eps is disabled
   env_layout_seed_repeat_sequence_length: -1 # 10
+  env_layout_seed_modulo: 0   # How many different layout seeds there should be overall? After given amount of seeds has been used, the seed will loop over to zero and repeat the seed sequence. Zero or negative modulo parameter value disables the modulo feature.
   num_pipeline_cycles: 0
   num_episodes: 2500 # how long to train. # if SB3 decides to use shorter episodes than specified in num_iters then the number of episodes will be bigger than num_episodes, so that total step count would stay same as num_episodes * num_iters.
   test_episodes: 100 # will be added to train episodes

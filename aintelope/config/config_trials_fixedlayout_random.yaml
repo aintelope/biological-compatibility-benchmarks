@@ -9,6 +9,7 @@ hparams:
   use_separate_models_for_each_experiment: True
   model_params: {}
   env_layout_seed_repeat_sequence_length: 1000000000
+  env_layout_seed_modulo: 0   # How many different layout seeds there should be overall? After given amount of seeds has been used, the seed will loop over to zero and repeat the seed sequence. Zero or negative modulo parameter value disables the modulo feature.
   num_pipeline_cycles: 0
   num_episodes: 0  # how long to train. # TODO: move num_episodes to model_params
   test_episodes: 100  # will be added to train episodes
