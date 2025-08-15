@@ -1,19 +1,19 @@
-Total commits: 923
-Total ctimes: 3421
-Total files: 175
-Total loc: 16931
+Total commits: 969
+Total ctimes: 4330
+Total files: 207
+Total loc: 20203
 | Author                              |   loc |   coms |   fils |  distribution   |
 |:------------------------------------|------:|-------:|-------:|:----------------|
-| Roland Pihlakas                     | 15731 |    416 |     97 | 92.9/45.1/55.4  |
-| Joel Pyykkö                         |   374 |    128 |     12 | 2.2/13.9/ 6.9   |
-| derdre                              |   373 |     62 |     23 | 2.2/ 6.7/13.1   |
-| a.kochanke                          |   239 |    145 |     20 | 1.4/15.7/11.4   |
-| Gunnar Zarncke                      |   127 |      1 |      1 | 0.8/ 0.1/ 0.6   |
-| Nathan Helm-Burger                  |    54 |     63 |      9 | 0.3/ 6.8/ 5.1   |
-| Hauke Rehfeld                       |    10 |     57 |      3 | 0.1/ 6.2/ 1.7   |
-| Orpheus Lummis                      |     9 |      2 |      3 | 0.1/ 0.2/ 1.7   |
-| U-SKETCHER\Gunnar Zarncke           |     6 |     12 |      3 | 0.0/ 1.3/ 1.7   |
-| ak                                  |     6 |      1 |      2 | 0.0/ 0.1/ 1.1   |
-| postuur                             |     1 |     33 |      1 | 0.0/ 3.6/ 0.6   |
-| Biological Compatibility Benchmarks |     1 |      1 |      1 | 0.0/ 0.1/ 0.6   |
+| Roland Pihlakas                     | 19010 |    462 |    130 | 94.1/47.7/62.8  |
+| Joel Pyykkö                         |   372 |    128 |     12 | 1.8/13.2/ 5.8   |
+| derdre                              |   369 |     62 |     23 | 1.8/ 6.4/11.1   |
+| a.kochanke                          |   239 |    145 |     20 | 1.2/15.0/ 9.7   |
+| Gunnar Zarncke                      |   127 |      1 |      1 | 0.6/ 0.1/ 0.5   |
+| Nathan Helm-Burger                  |    54 |     63 |      9 | 0.3/ 6.5/ 4.3   |
+| Hauke Rehfeld                       |    10 |     57 |      3 | 0.0/ 5.9/ 1.4   |
+| Orpheus Lummis                      |     9 |      2 |      3 | 0.0/ 0.2/ 1.4   |
+| U-SKETCHER\Gunnar Zarncke           |     6 |     12 |      3 | 0.0/ 1.2/ 1.4   |
+| ak                                  |     6 |      1 |      2 | 0.0/ 0.1/ 1.0   |
+| postuur                             |     1 |     33 |      1 | 0.0/ 3.4/ 0.5   |
+| Biological Compatibility Benchmarks |     0 |      1 |      0 | 0.0/ 0.1/ 0.0   |
 | NathanNeuro                         |     0 |      2 |      0 | 0.0/ 0.2/ 0.0   |
