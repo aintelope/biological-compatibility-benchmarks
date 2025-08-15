@@ -6,10 +6,14 @@
 
 import csv
 import gzip
+import lzma
+import shutil
 import logging
 import os
 import sys
 from pathlib import Path
+from io import BytesIO
+
 from typing import List, NamedTuple, Optional, Tuple
 
 import matplotlib
@@ -42,6 +46,48 @@ and run the same again in order to have a comparison point.
 """
 
 
+def to_xz(src_path, dst_path, dict_mb=16, nice_len=273, verify=True):
+    """
+    Compress src_path -> dst_path (.xz) using liblzma LZMA2 filter.
+    Emulates 7z parameters: -txz -mm=LZMA2 -md=16m -mfb=273 -mx9
+    """
+
+    filters = [
+        {
+            "id": lzma.FILTER_LZMA2,
+            "dict_size": dict_mb * 1024 * 1024,  # -md=16m
+            "lc": 3,  # -mx=9
+            "lp": 0,  # -mx=9
+            "pb": 2,  # -mx=9
+            "mode": lzma.MODE_NORMAL,  # -mx=9
+            "nice_len": nice_len,  # -mfb=273
+            "mf": lzma.MF_BT4,  # -mx=9: strong match finder
+            "depth": 0,  # 0 = auto (liblzma chooses based on other filter options)
+        }
+    ]
+
+    # XZ container with CRC64 (explicit)
+    with open(src_path, "rb") as fhin, lzma.open(
+        dst_path, "wb", format=lzma.FORMAT_XZ, check=lzma.CHECK_CRC64, filters=filters
+    ) as fhout:
+        shutil.copyfileobj(fhin, fhout, length=1024 * 1024)  # 1 MB chunks
+
+    if verify:
+        with open(src_path, "rb", 1024 * 1024) as ofh:
+            orig_data = ofh.read()
+
+        with lzma.open(dst_path, "rb") as lfh:
+            xz_data = lfh.read()
+
+        return orig_data == xz_data
+
+    else:
+        return True
+
+
+# / def to_xz(src_path, dst_path, dict_mb=16, nice_len=273, verify=True):
+
+
 class EventLog(object):
     default_gzip_compresslevel = 6  # 6 is default level for gzip: https://linux.die.net/man/1/gzip and https://github.com/ebiggers/libdeflate
 
@@ -52,7 +98,10 @@ class EventLog(object):
         headers,
         gzip_log=False,
         gzip_compresslevel=None,
+        lzma_log=False,
     ):
+        self.gzip_log = gzip_log
+        self.lzma_log = lzma_log
         self.record_path = Path(os.path.join(experiment_dir, events_fname))
         logger.info(f"Saving training records to disk at {self.record_path}")
         self.record_path.parent.mkdir(exist_ok=True, parents=True)
@@ -126,6 +175,11 @@ class EventLog(object):
         self.file.flush()
         self.file.close()
 
+        if self.lzma_log and not self.gzip_log:
+            xz_path = Path(str(self.record_path) + ".xz")
+            if to_xz(self.record_path, xz_path, verify=True):
+                os.remove(self.record_path)
+
 
 # / class EventLog(object):
 
@@ -163,6 +217,11 @@ def read_events(record_path, events_filename):
             str(path) + ".lock"
         ):  # lock for better robustness against other processes writing to it concurrently
             events.append(pd.read_csv(path))
+
+    for path in Path(record_path).rglob(events_filename + ".xz"):
+        with lzma.open(path, "rb") as lfh:
+            xz_data = lfh.read()
+        events.append(pd.read_csv(BytesIO(xz_data)))
 
     return events
 

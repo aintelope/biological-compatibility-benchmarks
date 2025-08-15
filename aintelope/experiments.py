@@ -83,7 +83,13 @@ def run_experiment(
 
     experiment_dir = os.path.normpath(cfg.experiment_dir)
     events_fname = cfg.events_fname
-    events = recording.EventLog(experiment_dir, events_fname, events_columns)
+    if "lzma_events_log" in cfg:  # backwards compatibility
+        lzma_events_log = cfg.lzma_events_log
+    else:
+        lzma_events_log = False
+    events = recording.EventLog(
+        experiment_dir, events_fname, events_columns, lzma_log=lzma_events_log
+    )
 
     # Common trainer for each agent's models
     if is_sb3:
