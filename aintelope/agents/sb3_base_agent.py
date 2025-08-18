@@ -283,6 +283,9 @@ class SB3BaseAgent(Agent):
         env_layout_seed: int = 0,
         episode: int = 0,
         pipeline_cycle: int = 0,
+        test_mode: bool = False,
+        *args,
+        **kwargs,
     ) -> Optional[int]:
         """Given an observation, ask your model what to do.
         Called during test only, not during training.
@@ -299,7 +302,7 @@ class SB3BaseAgent(Agent):
         self.info["i_pipeline_cycle"] = pipeline_cycle
         self.info["i_episode"] = episode
         self.info["step"] = step
-        self.info["test_mode"] = False
+        self.info["test_mode"] = test_mode
 
         self.infos[self.id] = self.info
 

@@ -315,6 +315,9 @@ class LLMAgent(Agent):
         env_layout_seed: int = 0,
         episode: int = 0,
         pipeline_cycle: int = 0,
+        test_mode: bool = False,
+        *args,
+        **kwargs,
     ) -> Optional[int]:
         """Given an observation, ask your model what to do. State is needed to be
         given here as other agents have changed the state!

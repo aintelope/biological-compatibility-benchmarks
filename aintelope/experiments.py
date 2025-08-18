@@ -326,6 +326,7 @@ def run_experiment(
                                     env_layout_seed=env_layout_seed,
                                     episode=i_episode,
                                     pipeline_cycle=i_pipeline_cycle,
+                                    test_mode=test_mode,
                                 )
 
                             # print(f"actions: {actions}")
@@ -416,6 +417,7 @@ def run_experiment(
                                         env_layout_seed=env_layout_seed,
                                         episode=i_episode,
                                         pipeline_cycle=i_pipeline_cycle,
+                                        test_mode=test_mode,
                                     )
 
                                 # Env step

@@ -82,6 +82,9 @@ class HandwrittenRulesAgent(Agent):
         env_layout_seed: int = 0,
         episode: int = 0,
         pipeline_cycle: int = 0,
+        test_mode: bool = False,
+        *args,
+        **kwargs,
     ) -> Optional[int]:
         """Given an observation, ask your model what to do.
 
@@ -100,7 +103,7 @@ class HandwrittenRulesAgent(Agent):
             min_action = action_space.min_action
             max_action = action_space.max_action
 
-        # calculate action reward predictions using handwritten_rules
+        # calculate action reward predictions using handwritten rules
         predicted_action_rewards = defaultdict(float)
 
         for (
@@ -138,7 +141,7 @@ class HandwrittenRulesAgent(Agent):
             #    print(f"gold q_values: {format_float(q_values)}")
 
         handwritten_rule_q_values = (
-            predicted_action_rewards  # handwritten_rules see only one step ahead
+            predicted_action_rewards  # handwritten rules see only one step ahead
         )
 
         q_values = np.zeros([max_action - min_action + 1], np.float32)
@@ -146,7 +149,7 @@ class HandwrittenRulesAgent(Agent):
             q_values[action - min_action] = bias
         action = (
             self.trainer.tiebreaking_argmax(q_values) + min_action
-        )  # take best action predicted by handwritten_rules
+        )  # take best action predicted by handwritten rules
 
         # print(f"Action: {action}")
         self.last_action = action
@@ -165,7 +168,7 @@ class HandwrittenRulesAgent(Agent):
     ) -> list:
         """
         Takes observations and updates trainer on perceived experiences.
-        Needed here to calculate handwritten_ruleual rewards.
+        Needed here to calculate handwritten rule rewards.
 
         Args:
             env: Environment
@@ -187,7 +190,7 @@ class HandwrittenRulesAgent(Agent):
         next_info = info
         # For future: add state (interoception) handling here when needed
 
-        # calculate handwritten_ruleual rewards
+        # calculate handwritten rules rewards
         if len(self.handwritten_rules) == 0:
             # use env reward if no handwritten_rules available
             handwritten_rule_events = []
