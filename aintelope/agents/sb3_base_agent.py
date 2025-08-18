@@ -53,6 +53,19 @@ Environment = Union[gym.Env, PettingZooEnv]
 logger = logging.getLogger("aintelope.agents.sb3_agent")
 
 
+class PolicyWithConfig(object):
+    def __init__(self, env_classname, agent_id, cfg, policy_constructor):
+        self.env_classname = env_classname
+        self.agent_id = agent_id
+        self.cfg = cfg
+        self.policy_constructor = policy_constructor
+
+    def __call__(self, *args, **kwargs):
+        return self.policy_constructor(
+            self.env_classname, self.agent_id, self.cfg, *args, **kwargs
+        )
+
+
 def vec_env_args(env, num_envs):
     assert num_envs == 1
 
@@ -138,11 +151,14 @@ def sb3_agent_train_thread_entry_point(
     gpu_index,
     num_total_steps,
     model_constructor,
+    env_classname,
     agent_id,
     checkpoint_filename,
     cfg,
     observation_space,
     action_space,
+    *args,
+    **kwargs,
 ):
     if (
         sys.gettrace() is None
@@ -181,7 +197,9 @@ def sb3_agent_train_thread_entry_point(
             else None
         )
 
-        model = model_constructor(env_wrapper, cfg)
+        model = model_constructor(env_wrapper, env_classname, agent_id, cfg)
+        env_wrapper.set_model(model)
+        self.model = model
         model.learn(total_timesteps=num_total_steps, callback=checkpoint_callback)
         env_wrapper.save_or_return_model(model, filename_timestamp_sufix_str)
     except (
@@ -215,6 +233,11 @@ class SB3BaseAgent(Agent):
         self.id = agent_id
         self.cfg = cfg
         self.env = env
+        self.env_classname = (
+            env.__class__.__bases__[0].__module__
+            + "."
+            + env.__class__.__bases__[0].__qualname__
+        )
         self.test_mode = test_mode
         self.i_pipeline_cycle = i_pipeline_cycle
         self.next_episode_no = 0
@@ -271,6 +294,17 @@ class SB3BaseAgent(Agent):
             return None
 
         # action_space = self.env.action_space(self.id)
+        self.info = info
+
+        self.info["i_pipeline_cycle"] = pipeline_cycle
+        self.info["i_episode"] = episode
+        self.info["step"] = step
+        self.info["test_mode"] = False
+
+        self.infos[self.id] = self.info
+
+        if self.model and hasattr(self.model.policy, "set_info"):
+            self.model.policy.set_info(self.info)
 
         action, _states = self.model.predict(
             observation, deterministic=True
@@ -324,6 +358,28 @@ class SB3BaseAgent(Agent):
         self.states = states
         self.infos = infos
 
+        i_pipeline_cycle = self.i_pipeline_cycle
+        i_episode = (
+            self.next_episode_no - 1
+        )  # cannot use env.get_next_episode_no() here since its counter is reset for each new env_layout_seed
+        step = 0
+        test_mode = False
+
+        for (
+            agent,
+            info,
+        ) in infos.items():  # TODO: move this code to savanna_safetygrid.py
+            info["i_pipeline_cycle"] = i_pipeline_cycle
+            info["i_episode"] = i_episode
+            info["step"] = 0
+            info["test_mode"] = test_mode
+
+        if self.model:
+            if hasattr(self.model.policy, "my_reset"):
+                self.model.policy.my_reset(self.state, self.info)
+            if hasattr(self.model.policy, "set_info"):
+                self.model.policy.set_info(self.info)
+
     def env_pre_step_callback(self, actions):
         return actions  # you can modify the actions in this method but keep in mind that the calling RL algorithm might not become aware of the modified actions later
 
@@ -376,6 +432,12 @@ class SB3BaseAgent(Agent):
             ]  # do not use scores[agent] in env_step_info since it is scalarised
             done = terminateds[agent] or truncateds[agent]
 
+            # TODO: move this code to savanna_safetygrid.py
+            info["i_pipeline_cycle"] = i_pipeline_cycle
+            info["i_episode"] = i_episode
+            info["step"] = step
+            info["test_mode"] = test_mode
+
             agent_step_info = [
                 agent,
                 state,
@@ -408,6 +470,12 @@ class SB3BaseAgent(Agent):
 
         self.states = next_states
         self.infos = infos
+
+        if self.model and hasattr(self.model.policy, "set_info"):
+            self.state = next_states[self.id]
+            self.info = infos[self.id]
+
+            self.model.policy.set_info(self.info)
 
     def sequential_env_post_step_callback(
         self,
@@ -468,6 +536,17 @@ class SB3BaseAgent(Agent):
             self.env.get_step_no() - 1
         )  # get_step_no() returned step indexes start with 1
         test_mode = False
+
+        # TODO: move this code to savanna_safetygrid.py
+        self.info["i_pipeline_cycle"] = i_pipeline_cycle
+        self.info["i_episode"] = i_episode
+        self.info["step"] = step
+        self.info["test_mode"] = test_mode
+
+        self.infos[self.id] = self.info
+
+        if self.model and hasattr(self.model.policy, "set_info"):
+            self.model.policy.set_info(self.info)
 
         self.events.log_event(
             [
@@ -559,7 +638,9 @@ class SB3BaseAgent(Agent):
                 self.cfg
             )  # need to resolve the conf before passing to subprocesses since OmegaConf resolvers do not seem to work well in subprocesses
 
-            env_wrapper = MultiAgentZooToGymAdapterZooSide(self.env, self.cfg)
+            env_wrapper = MultiAgentZooToGymAdapterZooSide(
+                self.env, self.env_classname, self.cfg
+            )
             self.models, self.exceptions = env_wrapper.train(
                 num_total_steps=num_total_steps,
                 agent_thread_entry_point=sb3_agent_train_thread_entry_point,

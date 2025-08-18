@@ -66,11 +66,15 @@ def to_xz(src_path, dst_path, dict_mb=16, nice_len=273, verify=True):
         }
     ]
 
-    # XZ container with CRC64 (explicit)
-    with open(src_path, "rb") as fhin, lzma.open(
-        dst_path, "wb", format=lzma.FORMAT_XZ, check=lzma.CHECK_CRC64, filters=filters
-    ) as fhout:
-        shutil.copyfileobj(fhin, fhout, length=1024 * 1024)  # 1 MB chunks
+    with open(src_path, "rb") as fhin:
+        with lzma.open(
+            dst_path,
+            "wb",
+            format=lzma.FORMAT_XZ,
+            check=lzma.CHECK_CRC64,
+            filters=filters,
+        ) as fhout:
+            shutil.copyfileobj(fhin, fhout, length=1024 * 1024)  # 1 MB chunks
 
     if verify:
         with open(src_path, "rb", 1024 * 1024) as ofh:
