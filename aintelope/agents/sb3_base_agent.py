@@ -310,6 +310,10 @@ class SB3BaseAgent(Agent):
             else i_episode  # this ensures that during test episodes, env_layout_seed based map randomization seed is different from training seeds. The environment is re-constructed when testing starts. Without explicitly providing env_layout_seed, the map randomization seed would be automatically reset to env_layout_seed = 0, which would overlap with the training seeds.
         )
 
+        # How many different layout seeds there should be overall? After given amount of seeds has been used, the seed will loop over to zero and repeat the seed sequence. Zero or negative modulo parameter value disables the modulo feature.
+        if self.cfg.hparams.env_layout_seed_modulo > 0:
+            env_layout_seed = env_layout_seed % self.cfg.hparams.env_layout_seed_modulo
+
         kwargs["env_layout_seed"] = env_layout_seed
 
         return (True, seed, options, args, kwargs)  # allow reset
