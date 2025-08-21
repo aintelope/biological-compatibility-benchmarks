@@ -88,7 +88,11 @@ def run_experiment(
     else:
         lzma_events_log = False
     events = recording.EventLog(
-        experiment_dir, events_fname, events_columns, lzma_log=lzma_events_log
+        experiment_dir,
+        events_fname,
+        events_columns,
+        # NB! compress the log only after test has run, else if were already compressed after train, opening the CSV log during test would create a new file (instead of appending) and then at the end of the test, compressing that new CSV file would just overwrite the already existing compressed (training) log
+        lzma_log=lzma_events_log and test_mode,
     )
 
     # Common trainer for each agent's models
