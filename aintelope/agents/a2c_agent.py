@@ -22,6 +22,11 @@ from aintelope.agents.sb3_base_agent import (
     SB3BaseAgent,
     CustomCNN,
     PolicyWithConfigFactory,
+    INFO_PIPELINE_CYCLE,
+    INFO_EPISODE,
+    INFO_ENV_LAYOUT_SEED,
+    INFO_STEP,
+    INFO_TEST_MODE,
 )
 from aintelope.aintelope_typing import ObservationFloat, PettingZooEnv
 from aintelope.training.dqn_training import Trainer
@@ -95,10 +100,11 @@ class ExpertOverrideMixin:  # TODO: merge with code from PPO agent (the code is 
         distribution = self._get_action_dist_from_latent(latent_pi)
 
         # inserted code
-        step = self.info["step"]
-        episode = self.info["i_episode"]
-        pipeline_cycle = self.info["i_pipeline_cycle"]
-        test_mode = self.info["test_mode"]
+        step = self.info[INFO_STEP]
+        env_layout_seed = self.info[INFO_ENV_LAYOUT_SEED]
+        episode = self.info[INFO_EPISODE]
+        pipeline_cycle = self.info[INFO_PIPELINE_CYCLE]
+        test_mode = self.info[INFO_TEST_MODE]
 
         obs_nps = obs.detach().cpu().numpy()
         obs_np = obs_nps[0, :]
@@ -106,6 +112,7 @@ class ExpertOverrideMixin:  # TODO: merge with code from PPO agent (the code is 
         (override_type, _random) = self.expert.should_override(
             deterministic,
             step,
+            env_layout_seed,
             episode,
             pipeline_cycle,
             test_mode,
@@ -116,6 +123,7 @@ class ExpertOverrideMixin:  # TODO: merge with code from PPO agent (the code is 
                 obs_np,
                 self.info,
                 step,
+                env_layout_seed,
                 episode,
                 pipeline_cycle,
                 test_mode,

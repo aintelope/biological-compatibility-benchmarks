@@ -92,6 +92,7 @@ class SB3HandWrittenRulesExpert(object):
         self,
         deterministic: bool = False,  # This is set only during evaluation, not training and the meaning is that the agent is greedy - it takes the best action. It does NOT mean that the action is always same.
         step: int = 0,
+        env_layout_seed: int = 0,
         episode: int = 0,
         pipeline_cycle: int = 0,
         test_mode: bool = False,
@@ -184,6 +185,7 @@ class SB3HandWrittenRulesExpert(object):
         observation=None,
         info: dict = {},
         step: int = 0,
+        env_layout_seed: int = 0,
         episode: int = 0,
         pipeline_cycle: int = 0,
         test_mode: bool = False,

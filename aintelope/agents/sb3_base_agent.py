@@ -46,6 +46,13 @@ from typing import Any, Union
 import gymnasium as gym
 from pettingzoo import AECEnv, ParallelEnv
 
+# TODO: implement these infos in savanna_safetygrid.py instead
+INFO_PIPELINE_CYCLE = "pipeline_cycle"
+INFO_EPISODE = "episode"
+INFO_ENV_LAYOUT_SEED = "env_layout_seed"
+INFO_STEP = "step"
+INFO_TEST_MODE = "test_mode"
+
 PettingZooEnv = Union[AECEnv, ParallelEnv]
 Environment = Union[gym.Env, PettingZooEnv]
 
@@ -199,7 +206,6 @@ def sb3_agent_train_thread_entry_point(
 
         model = model_constructor(env_wrapper, env_classname, agent_id, cfg)
         env_wrapper.set_model(model)
-        self.model = model
         model.learn(total_timesteps=num_total_steps, callback=checkpoint_callback)
         env_wrapper.save_or_return_model(model, filename_timestamp_sufix_str)
     except (
@@ -299,10 +305,11 @@ class SB3BaseAgent(Agent):
         # action_space = self.env.action_space(self.id)
         self.info = info
 
-        self.info["i_pipeline_cycle"] = pipeline_cycle
-        self.info["i_episode"] = episode
-        self.info["step"] = step
-        self.info["test_mode"] = test_mode
+        self.info[INFO_PIPELINE_CYCLE] = pipeline_cycle
+        self.info[INFO_EPISODE] = episode
+        self.info[INFO_ENV_LAYOUT_SEED] = env_layout_seed
+        self.info[INFO_STEP] = step
+        self.info[INFO_TEST_MODE] = test_mode
 
         self.infos[self.id] = self.info
 
@@ -365,6 +372,9 @@ class SB3BaseAgent(Agent):
         i_episode = (
             self.next_episode_no - 1
         )  # cannot use env.get_next_episode_no() here since its counter is reset for each new env_layout_seed
+        env_layout_seed = (
+            self.env.get_env_layout_seed()
+        )  # no need to substract 1 here since env_layout_seed value is overridden in env_pre_reset_callback
         step = 0
         test_mode = False
 
@@ -372,10 +382,11 @@ class SB3BaseAgent(Agent):
             agent,
             info,
         ) in infos.items():  # TODO: move this code to savanna_safetygrid.py
-            info["i_pipeline_cycle"] = i_pipeline_cycle
-            info["i_episode"] = i_episode
-            info["step"] = 0
-            info["test_mode"] = test_mode
+            info[INFO_PIPELINE_CYCLE] = i_pipeline_cycle
+            info[INFO_EPISODE] = i_episode
+            info[INFO_ENV_LAYOUT_SEED] = env_layout_seed
+            info[INFO_STEP] = 0
+            info[INFO_TEST_MODE] = test_mode
 
         if self.model:
             if hasattr(self.model.policy, "my_reset"):
@@ -436,10 +447,11 @@ class SB3BaseAgent(Agent):
             done = terminateds[agent] or truncateds[agent]
 
             # TODO: move this code to savanna_safetygrid.py
-            info["i_pipeline_cycle"] = i_pipeline_cycle
-            info["i_episode"] = i_episode
-            info["step"] = step
-            info["test_mode"] = test_mode
+            info[INFO_PIPELINE_CYCLE] = i_pipeline_cycle
+            info[INFO_EPISODE] = i_episode
+            info[INFO_ENV_LAYOUT_SEED] = env_layout_seed
+            info[INFO_STEP] = step
+            info[INFO_TEST_MODE] = test_mode
 
             agent_step_info = [
                 agent,
@@ -541,10 +553,11 @@ class SB3BaseAgent(Agent):
         test_mode = False
 
         # TODO: move this code to savanna_safetygrid.py
-        self.info["i_pipeline_cycle"] = i_pipeline_cycle
-        self.info["i_episode"] = i_episode
-        self.info["step"] = step
-        self.info["test_mode"] = test_mode
+        self.info[INFO_PIPELINE_CYCLE] = i_pipeline_cycle
+        self.info[INFO_EPISODE] = i_episode
+        self.info[INFO_ENV_LAYOUT_SEED] = env_layout_seed
+        self.info[INFO_STEP] = step
+        self.info[INFO_TEST_MODE] = test_mode
 
         self.infos[self.id] = self.info
 
