@@ -655,7 +655,7 @@ class SB3BaseAgent(Agent):
             )  # need to resolve the conf before passing to subprocesses since OmegaConf resolvers do not seem to work well in subprocesses
 
             env_wrapper = MultiAgentZooToGymAdapterZooSide(
-                self.env, self.env_classname, self.cfg
+                self.env, self.cfg, self.env_classname
             )
             self.models, self.exceptions = env_wrapper.train(
                 num_total_steps=num_total_steps,

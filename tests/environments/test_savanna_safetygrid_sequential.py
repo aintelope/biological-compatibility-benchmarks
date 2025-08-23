@@ -233,11 +233,14 @@ def sb3_gym_test_thread_entry_point(
     gpu_index,
     num_total_steps,
     model_constructor,
+    env_classname,
     agent_id,
     checkpoint_filename,
     cfg,
     observation_space,
     action_space,
+    *args,
+    **kwargs,
 ):
     env_wrapper = MultiAgentZooToGymAdapterGymSide(
         pipe, agent_id, checkpoint_filename, observation_space, action_space
@@ -280,7 +283,7 @@ def sb3_gym_test_thread_entry_point(
 #    env.seed(execution_number)
 
 #    env_wrapper = MultiAgentZooToGymAdapterZooSide(
-#        env, cfg=None
+#        env, cfg=None, env_classname=None
 #    )  # cfg is unused at sb3_gym_test_thread_entry_point() function
 #    _, exceptions = env_wrapper.train(
 #        num_total_steps=None,  # unused at sb3_gym_test_thread_entry_point() function
