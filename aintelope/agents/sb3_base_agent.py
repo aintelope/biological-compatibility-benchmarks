@@ -48,7 +48,7 @@ from pettingzoo import AECEnv, ParallelEnv
 
 # TODO: implement these infos in savanna_safetygrid.py instead
 INFO_PIPELINE_CYCLE = "pipeline_cycle"
-INFO_EPISODE = "episode"
+INFO_EPISODE = "i_episode"  # NB! cannot use "episode" because it is used internally by Stable Baselines (including ver 3), see: https://github.com/hill-a/stable-baselines/issues/977
 INFO_ENV_LAYOUT_SEED = "env_layout_seed"
 INFO_STEP = "step"
 INFO_TEST_MODE = "test_mode"
