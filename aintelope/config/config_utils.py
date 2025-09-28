@@ -273,12 +273,13 @@ def rotate_active_gpu_selection():
     else:
         import sqlite3
 
-        conn = sqlite3.connect("gpu_counter.db")
+        conn = sqlite3.connect("gpu_counter2.db")
 
+        # NB! dummy column is needed to ensure that the INSERT is done only during first call and not on subsequent calls. There must be only one row in the table.
         cmd = """
         CREATE TABLE IF NOT EXISTS gpu_counter_table 
-        (gpu_counter INTEGER);
-        INSERT OR IGNORE INTO gpu_counter_table (gpu_counter) VALUES (0);
+        (dummy INTEGER UNIQUE, gpu_counter INTEGER);
+        INSERT OR IGNORE INTO gpu_counter_table (dummy, gpu_counter) VALUES (0, 0);
         """
         cursor = conn.cursor()
         cursor.executescript(cmd)
