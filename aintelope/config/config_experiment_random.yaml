@@ -36,7 +36,8 @@ hparams:
   agent_class: random_agent
   save_frequency: 0 # how often to save a model. 0 means that the model is saved only at the end, improving training performance
   use_separate_models_for_each_experiment: True
-  agent_params: {}
+  agent_params:
+    target_handwritten_rules: [food,drink,gold,silver,danger,predator,collision,antimovement]    
   model_params:
     use_weight_sharing: False
   env_layout_seed_repeat_sequence_length: -1 # 10

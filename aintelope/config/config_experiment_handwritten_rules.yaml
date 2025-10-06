@@ -42,6 +42,8 @@ hparams:
     use_weight_sharing: False
     eps_start: 0.0
     eps_end: 0.0
+    instinct_bias_epsilon_start: 0.0
+    instinct_bias_epsilon_end: 0.0
     eps_last_pipeline_cycle: -1
     eps_last_episode: -1       # use -1 when episode counting for eps is disabled
     eps_last_env_layout_seed: -1  # 10       # use -1 when trials counting for eps is disabled
